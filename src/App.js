@@ -1,24 +1,41 @@
-import logo from './logo.svg';
+import React, { Suspense } from "react";
+import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-dom";
+
+import routes from './routes';
 import './App.css';
+import Header from "./components/Header";
+
+const showContentMenus = (routes) => {
+  let result = null;
+  if (routes.length > 0) {
+    result = routes.map((route, index) => {
+      return <Route key={index}
+        path={route.path}
+        exact={route.exact}
+        component={route.component}
+      />
+    })
+  }
+  return result;
+};
 
 function App() {
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      {/* <Suspense
+      fallback={
+      <div style={{ width: "100%" }}>
+        <CustomizedLinearProgress isOpen={true} />
+      </div>
+      }
+      > */}
+      <Header />
+      <Switch>
+        {showContentMenus(routes)}
+      </Switch>
+      {/* </Suspense> */}
+    </Router>
   );
 }
 
