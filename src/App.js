@@ -40,6 +40,8 @@ function App() {
   return (
     <Router>
       {/* component load */}
+      <Progress isLoad={load} />
+
       <Header catelists={catelists} user={profile} />
       <Switch>
         <Route path='/' exact component={Home} />

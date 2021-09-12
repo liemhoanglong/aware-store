@@ -1,6 +1,6 @@
 .product-card-wapper{
-    /* width: 190px;     */
-    width: calc(20% - 24px); 
+    width: 190px;    
+    /* width: calc(20% - 24px);  */
     height: 345px;
 }
 

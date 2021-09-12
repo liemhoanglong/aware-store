@@ -68,8 +68,9 @@ function loginUser(dispatch, username, password, history, setIsLoading, setError
         dispatch({ isAuthenticated: LOGIN_SUCCESS });
       })
       .catch(err => {
+        console.log(err)
         if (err.response) {
-          setError(err.response.data.message);
+          setError(err.response.data.err);
         } else {
           setError("Login fail!");
         }

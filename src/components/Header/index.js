@@ -71,8 +71,15 @@ export default function Header(props) {
                     </Col>
                     <Col>
                         <div className='d-flex justify-content-end'>
-                            <Button onClick={() => setSignupShow(true)} className='header-button1-custom' variant="outline">Register</Button>
-                            <Button onClick={() => setLoginShow(true)} className='header-button2-custom' variant="outline">Log In</Button>
+                            {props.user ?
+                                <div>
+                                    <img src={props.user.avatar} />
+                                </div>
+                                : <>
+                                    <Button onClick={() => setSignupShow(true)} className='header-button1-custom' variant="outline">Register</Button>
+                                    <Button onClick={() => setLoginShow(true)} className='header-button2-custom' variant="outline">Log In</Button>
+                                </>
+                            }
                             <Link to="/cart" className='link-custom'>
                                 <div className='d-flex ms-4'>
                                     <img className='icon-cart' src={cart} alt='cart' />
@@ -91,6 +98,7 @@ export default function Header(props) {
                 </Row>
             </Container>
             <hr style={{ color: 'lightgray', boxShadow: '.1px 0 .7px rgba(0, 0, 0, 2)' }} />
+            {/* nav bar */}
             <Container>
                 <div className='nav-header d-flex justify-content-center position-relative'>
                     <div className='nav-header-dropdown'>
@@ -100,10 +108,6 @@ export default function Header(props) {
                             {catelists.length > 0 && catelists[0].map((item, idx) => (
                                 <Link to={`/product-list?catelist=6136342577e31326701a18fd&categroup=${item._id}`} key={idx} className="link-custom nav-header-dropdown-content">{item.name}</Link>
                             ))}
-                            <span className="nav-header-dropdown-content">Tops men</span>
-                            <span className="nav-header-dropdown-content">Tops men</span>
-                            <span className="nav-header-dropdown-content">Tops men</span>
-                            <span className="nav-header-dropdown-content">Tops men</span>
                         </div>
                     </div>
                     <div className='nav-header-dropdown'>
@@ -113,10 +117,6 @@ export default function Header(props) {
                             {catelists.length > 0 && catelists[1].map((item, idx) => (
                                 <Link to={`/product-list?catelist=6136343677e31326701a1901&categroup=${item._id}`} key={idx} className="link-custom nav-header-dropdown-content">{item.name}</Link>
                             ))}
-                            <span className="nav-header-dropdown-content">Tops</span>
-                            <span className="nav-header-dropdown-content">Tops</span>
-                            <span className="nav-header-dropdown-content">Tops</span>
-                            <span className="nav-header-dropdown-content">Tops</span>
                         </div>
                     </div>
                     <div className='nav-header-dropdown'>
@@ -126,10 +126,6 @@ export default function Header(props) {
                             {catelists.length > 0 && catelists[2].map((item, idx) => (
                                 <Link to={`/product-list?catelist=6136343b77e31326701a1903&categroup=${item._id}`} key={idx} className="link-custom nav-header-dropdown-content">{item.name}</Link>
                             ))}
-                            <span className="nav-header-dropdown-content">Tops girl</span>
-                            <span className="nav-header-dropdown-content">Tops girl</span>
-                            <span className="nav-header-dropdown-content">Tops girl</span>
-                            <span className="nav-header-dropdown-content">Tops girl</span>
                         </div>
                     </div>
                     <div className='nav-header-dropdown'>
@@ -139,11 +135,6 @@ export default function Header(props) {
                             {catelists.length > 0 && catelists[3].map((item, idx) => (
                                 <Link to={`/product-list?catelist=6136346c9f814a47407fae2b&categroup=${item._id}`} key={idx} className="link-custom nav-header-dropdown-content">{item.name}</Link>
                             ))}
-                            <span className="nav-header-dropdown-content">Tops boy</span>
-                            <span className="nav-header-dropdown-content">Tops boy</span>
-                            <span className="nav-header-dropdown-content">Tops boy</span>
-                            <span className="nav-header-dropdown-content">Tops boy</span>
-                            <span className="nav-header-dropdown-content">Tops boy</span>
                         </div>
                     </div>
                 </div>

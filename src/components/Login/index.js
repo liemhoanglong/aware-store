@@ -1,15 +1,35 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Modal, Col, Button } from 'react-bootstrap';
+import { Modal, Button } from 'react-bootstrap';
 
 import checkedBox from '../../images/checked-box.svg';
 import checkBox from '../../images/check-box.svg';
+import { useUserDispatch, loginUser, useUserState } from "../../contexts/UserContext";
+import Progress from '../Progress';
 
 export default function Login(props) {
+    const { isAuthenticated } = useUserState();
+
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [load, setLoad] = useState(false);
+    const [error, setError] = useState('');
+
+    const userDispatch = useUserDispatch();
+
+    const onSubmit = (e) => {
+        e.preventDefault();
+        loginUser(userDispatch, username, password, props.history, setLoad, setError)
+    }
+
     const onClickSigup = () => {
         props.setLoginShow(false);
         props.setSignupShow(true);
     }
+
+    if (isAuthenticated) {
+        props.setLoginShow(false);
+    }
+
     return (
         <Modal
             {...props}
@@ -17,24 +37,27 @@ export default function Login(props) {
             aria-labelledby="contained-modal-title-vcenter"
             centered
         >
+            <Progress isLoad={load} />
             <Modal.Header closeButton></Modal.Header>
             <Modal.Body>
                 <center>
                     <h4 style={{ fontFamily: 'Montserrat', fontSize: '32px', fontWeight: 'bold' }}>Login</h4>
-                    <p className='my-2 modal-text-error'>Your e-mail/password is invalid!</p>
+                    {error &&
+                        <p className='my-2 modal-text-error'>Your e-mail/password is invalid!</p>
+                    }
                 </center>
-                <div style={{ padding: '15px 80px 17px' }}>
+                <form onSubmit={onSubmit} style={{ padding: '15px 80px 17px' }}>
                     <p className='mb-2 model-lable'><b>E-MAIL</b></p>
-                    <input type='email' name='email' className='mb-4 modal-input' placeholder='Enter your e-mail...' />
+                    <input onChange={e => setUsername(e.target.value)} type='email' name='email' className={`mb-4 modal-input${error ? '-error' : ''} `} placeholder='Enter your e-mail...' />
                     <p className='mb-2 model-lable'><b>PASSWORD</b></p>
-                    <input type='password' name='password' className='mb-4 modal-input' placeholder='Enter your password...' />
+                    <input onChange={e => setPassword(e.target.value)} type='password' name='password' className={`mb-4 modal-input${error ? '-error' : ''} `} placeholder='Enter your password...' />
                     <div className='d-flex justify-content-between' >
                         {/* {props.filter.brand === brand._id ? <img src={checkedBox} alt='checked-box' /> : <img src={checkBox} alt='check-box' />} */}
                         <div className='cursor-hover'><img src={checkedBox} alt='checked-box' /><span style={{ fontSize: '14px', fontWeight: '300', color: '4d4d4d', fontFamily: 'Montserrat' }} >Remember password</span></div>
                         <span onClick={() => { props.setLoginShow(false); props.setForgotPassShow(true); }} className='cursor-hover' style={{ fontWeight: '600', fontSize: '14px', fontFamily: 'Montserrat', paddingTop: '3px' }}>Forgot your password?</span>
                     </div>
-                    <Button className='modal-btn' variant="secondary">Login</Button>
-                </div>
+                    <Button type='submit' className='modal-btn' variant="secondary" disabled={(username != '' && password != '') ? false : true}>Login</Button>
+                </form>
             </Modal.Body>
             <Modal.Footer>
                 Don’t have an account?
