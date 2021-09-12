@@ -1,0 +1,126 @@
+.header-group{
+  padding-top: 22px;
+  padding-bottom: 12px;
+}
+
+.header-search input{
+  width: 181px;
+  height: 35px;
+  border-radius: 100px;
+  border: solid 1px #b7b7b7;
+  color:  #b7b7b7;
+}
+
+.form-control:focus {
+  border-color: #ffa15f;
+  box-shadow: 0 0 0 0.25rem #ffa25f7c
+}
+
+.icon-search{
+  position: absolute;
+  margin-left: 150px;
+  margin-top: 10px;
+}
+
+.icon-cart{
+  margin-top: 7px;
+}
+
+.number-cart{
+  margin-left: 10px;
+  position: absolute;
+  background-color: #ffa15f;
+  border-radius: 50%;
+  height: 18px;
+  width: 18px;
+  color:white;
+  text-align: center;
+  margin-bottom: 5px;
+  font: 14px Montserrat;
+}
+
+.header-button1-custom{
+  width: 120px;
+  height: 35px;
+  border-radius: 100px;
+  color: #505050;
+}
+
+.header-button1-custom:hover{
+  background-color: #ffa15f;
+  color: white;
+}
+
+.header-button1-custom:focus{
+  box-shadow: none;
+}
+
+.header-button2-custom{
+  width: 120px;
+  height: 35px;
+  border-radius: 100px;
+  border: solid 1px #ffa15f;
+  color:  #ffa15f;
+  font-weight: 700;
+}
+
+.header-button2-custom:hover{
+  background-color: #ffa15f;
+  color: white;
+}
+
+.header-button2-custom:focus{
+  box-shadow: none;
+}
+
+.logo{
+  width: 96px;
+  height: 20px;
+  margin-top: 8px;
+  object-fit: contain;
+}
+
+.nav-header-dropdown{
+  height: 50px;
+  margin-left: 10px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.nav-header-dropdown-contents {
+  padding-top: 20px;
+  display: none;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+}
+
+.nav-header-dropdown-contents::before {
+  content: "";
+  position: absolute;
+  top: 20px;
+  left: 0;
+  width: 100%;
+  height: 90%;
+  background-color: #FBFBFB;
+}
+
+.nav-header-dropdown:hover .nav-header-dropdown-contents {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nav-header-dropdown-content {
+  padding: 0 18px;
+  font-weight: 300;
+  font-family: Montserrat;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  z-index: 2;
+}
+
+.nav-header-dropdown-content:hover {
+  background-color: #eaeaea;
+}

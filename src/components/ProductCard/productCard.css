@@ -1,0 +1,102 @@
+.product-card-wapper{
+    /* width: 190px;     */
+    width: calc(20% - 24px); 
+    height: 345px;
+}
+
+.product-card-img{
+    width: 100%; 
+    height: 269px;
+    cursor: pointer;
+    position: relative;
+}   
+
+.product-card-img:before{
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 54px;
+    background-color: #ffa15f;
+    z-index: 2;
+    opacity: 0;
+    transition: 1s all;
+}  
+
+.product-card-img:hover:before{
+    opacity: 1;
+}
+
+.product-card-img img{
+    width: 100%; 
+    height: 100%;
+    object-fit: cover; 
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.product-card-img .product-card-btn{
+    position: absolute;
+    width: 190px;
+    color: white;
+    text-align: center;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    opacity: 0;
+    transition: .5s all;
+}
+
+.product-card-img:hover .product-card-btn{
+    opacity: 1;
+}
+
+.product-card-status{
+    position: absolute;
+    left: -4px;
+    bottom: 8px;
+    width: 52px;
+    height: 22px;
+    background-color: #808080;
+}
+
+.product-card-status div{
+    width: 44px;
+    color: white;
+    font-family: Montserrat;
+    font-size: 10px;
+    font-weight: bold;
+}
+
+
+.product-card-status span{
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
+
+.product-card-name-text{
+    font-family: Montserrat;
+    font-size: 14px;
+    font-weight: 500;
+    overflow: hidden;
+    display: -webkit-box;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    word-break: break-word;
+    -webkit-box-orient: vertical;  
+    overflow: hidden;
+    margin-top: 10px;
+    margin-bottom: 0;
+}
+
+.product-card-price-text{
+    color: #4d4d4d;
+    font-family: Montserrat;
+    font-size: 12px;
+    font-weight: 300;
+}

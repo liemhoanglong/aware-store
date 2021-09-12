@@ -1,0 +1,103 @@
+.line-litle {
+  width: 20px;
+  height: 3px;
+  border-top: solid 0.5px #9797977c;
+  margin-top: 8px;
+}
+
+.line {
+  width: 101px;
+  height: 0.1px;
+  margin: 40px 0px 40px 0px;
+  border-top: solid 0.2px #9797977c;
+}
+
+.line-dash {
+  width: 100%;
+  height: 0.1px;
+  margin: 8px 0px 8px 0px;
+  border-top: dashed .2px #9797977c;
+}
+
+.cate{
+  line-height: 3rem;
+}
+
+.product-filter-size-items{
+  opacity: 0;
+  visibility: hidden;
+  height: 0;
+}
+
+.product-filter-size:hover .product-filter-size-items, 
+.product-filter-color:hover .product-filter-color-items,
+.product-filter-brand:hover .product-filter-brand-items,
+.product-filter-price:hover .product-filter-price-items,
+.product-filter-available:hover .product-filter-available-items{
+  visibility: visible;
+  opacity: 1;
+  transition: 1s all;
+  height: 100%;
+}
+
+.product-filter-color-items,.product-filter-color-items,
+.product-filter-brand-items,.product-filter-price-items,
+.product-filter-available-items{
+  opacity: 0;
+  visibility: hidden;
+  height: 0;
+}
+
+.product-filter-size:hover .product-filter-size-arrow-down,
+.product-filter-color:hover .product-filter-color-arrow-down,
+.product-filter-brand:hover .product-filter-brand-arrow-down,
+.product-filter-price:hover .product-filter-price-arrow-down,
+.product-filter-available:hover .product-filter-available-arrow-down{
+  transform: rotate(180deg);
+  transition: .5s all;
+}
+
+.product-filter-size-item-btn{
+  width: 40px;
+  height: 40px;
+  background-color: transparent;
+  border: solid 1px #808080;
+}
+
+.product-filter-size-item-btn:hover, 
+.product-filter-color-item:hover{
+  box-shadow: 0 1px 8px 0 rgba(0, 0, 0, .8);
+}
+
+.product-filter-available-item:hover,
+.product-filter-brand-item:hover{
+  background-color:  #ffa25f75;
+}
+
+
+.product-filter-size-item-btn-active{
+  width: 40px;
+  height: 40px;
+  background-color: #ffa15f;
+  border: none;
+  color: white;
+  font-weight: bold;
+}
+
+.product-filter-color-item{
+  position: relative;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+}
+
+.product-filter-color-item-active{
+  position: relative;
+  width: 30px;
+  height: 30px;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 1px 8px 0 rgba(0, 0, 0, .8);
+  /* border: 1px solid black; */
+}

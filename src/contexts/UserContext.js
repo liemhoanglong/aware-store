@@ -16,7 +16,6 @@ function UserProvider({ children }) {
     const fetchData = async () => {
       try {
         const res = await CallAuthAPI('/user/profile', 'GET', null);
-        console.log(res.status)
         if (res.status === 200) {
           setLoginState({ isAuthenticated: true, profile: res.data })
         } else {
@@ -41,7 +40,7 @@ function UserProvider({ children }) {
 }
 
 function useUserState() {
-  var context = React.useContext(UserStateContext);
+  const context = React.useContext(UserStateContext);
   if (context === undefined) {
     throw new Error("useUserState must be used within a UserProvider");
   }
@@ -49,7 +48,7 @@ function useUserState() {
 }
 
 function useUserDispatch() {
-  var context = React.useContext(UserDispatchContext);
+  const context = React.useContext(UserDispatchContext);
   if (context === undefined) {
     throw new Error("useUserDispatch must be used within a UserProvider");
   }
@@ -67,7 +66,6 @@ function loginUser(dispatch, username, password, history, setIsLoading, setError
         setError(false);
         setIsLoading(false);
         dispatch({ isAuthenticated: LOGIN_SUCCESS });
-        // history.push('/app/dashboard');
       })
       .catch(err => {
         if (err.response) {
