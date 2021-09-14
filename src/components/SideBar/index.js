@@ -16,20 +16,26 @@ const SideBar = (props) => {
   const [minValue, setMinValue] = useState(props.filter.minprice);
   const [maxValue, setMaxValue] = useState(props.filter.maxprice);
   const [cates, setCates] = useState([])
-  console.log(cates)
+  // console.log(cates)
 
   useEffect(() => {
     const fetchAll = async () => {
       try {
         let queryObject = QueryString.parse(history.location.search);
-        let res = await CallAPI(`/cate${queryObject.categroup === undefined ? '' : ('/by-group/' + props.filter.categroup)}`, 'get', null);
+        let res
+        if (queryObject.categroup === undefined && queryObject.catelist === undefined)
+          res = await CallAPI(`/cate`, 'get', null);
+        else if (queryObject.categroup === undefined)
+          res = await CallAPI(`/cate/by-list/${queryObject.catelist}`, 'get', null);
+        else
+          res = await CallAPI(`/cate/by-list-and-group/${queryObject.catelist}/${queryObject.categroup}`, 'get', null);
         setCates(res.data.data);
       } catch (err) {
         console.log(err)
       }
     }
     fetchAll();
-  }, [])
+  }, [props.filter.categroup, props.filter.catelist])
 
   const handleChangeFilterPrice = () => {
     props.handleChangeFilter({ minprice: minValue, maxprice: maxValue })
