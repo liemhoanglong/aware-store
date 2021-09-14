@@ -38,21 +38,23 @@ function App() {
   // console.log(catelists)
 
   return (
-    <Router>
-      {/* component load */}
-      <Progress isLoad={load} />
+    <div className='App'>
+      <Router>
+        {/* component load */}
+        <Progress isLoad={load} />
 
-      <Header catelists={catelists} user={profile} />
-      <Switch>
-        <Route path='/' exact component={Home} />
-        <Route path='/profile' exact component={Profile} />
-        <Route path='/shopping-cart' exact component={ShoppingCart} />
-        <Route path='/product-list' exact component={ProductList} />
-        <Route path='/product-item/:id' exact component={ProductInfo} />
-        <Route path='' component={PageNotFound} />
-      </Switch>
-      <Footer />
-    </Router>
+        <Header catelists={catelists} user={profile} />
+        <Switch>
+          <Route path='/' exact component={Home} />
+          <Route path='/profile/:state' exact component={Profile} />
+          <Route path='/shopping-cart' exact component={ShoppingCart} />
+          <Route path='/product-list' exact component={ProductList} />
+          <Route path='/product-item/:id' exact component={ProductInfo} />
+          <Route path='' component={PageNotFound} />
+        </Switch>
+        <Footer />
+      </Router>
+    </div>
   );
 }
 

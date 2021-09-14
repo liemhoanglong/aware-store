@@ -38,21 +38,21 @@ export default function ForgotPass(props) {
             <Modal.Header closeButton></Modal.Header>
             <Modal.Body>
                 <center>
-                    <h4 style={{ fontFamily: 'Montserrat', fontSize: '32px', fontWeight: 'bold' }}>Forgot Password</h4>
+                    <h4 style={{ fontSize: '32px', fontWeight: 'bold' }}>Forgot Password</h4>
                     {show && <span style={{ color: '#f63f45' }}>Please check your email!</span>}
                 </center>
                 <form onSubmit={onSubmit} style={{ padding: '27px 80px' }}>
                     <p className='mb-2'><b>E-MAIL</b></p>
                     <input onChange={e => setUsername(e.target.value)} type='email' name='email' className={`modal-input`} placeholder='Enter your e-mail...' />
 
-                    <center className='mt-2 text-14 font-mon'>
+                    <center className='mt-2 text-14 '>
                         <Button type='submit' style={{ marginTop: '27px' }} className='modal-btn' variant="secondary" >Submit</Button>
                     </center>
                 </form>
             </Modal.Body>
-            <Modal.Footer className='text-14 font-mon'>
+            <Modal.Footer className='text-14'>
                 <span style={{ fontWeight: '400' }}>I remember my password now.</span>
-                <span className='cursor-hover color-ffa15f text-underline p-0' onClick={onClickLogin}>Log In</span>
+                <span className='cursor-hover text-color-orange text-underline p-0' onClick={onClickLogin}>Log In</span>
             </Modal.Footer>
         </Modal >
     );

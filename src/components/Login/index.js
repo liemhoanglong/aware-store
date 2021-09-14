@@ -41,7 +41,7 @@ export default function Login(props) {
             <Modal.Header closeButton></Modal.Header>
             <Modal.Body>
                 <center>
-                    <h4 style={{ fontFamily: 'Montserrat', fontSize: '32px', fontWeight: 'bold' }}>Login</h4>
+                    <h4 style={{ fontSize: '32px', fontWeight: 'bold' }}>Login</h4>
                     {error &&
                         <p className='my-2 modal-text-error'>Your e-mail/password is invalid!</p>
                     }
@@ -53,15 +53,15 @@ export default function Login(props) {
                     <input onChange={e => setPassword(e.target.value)} type='password' name='password' className={`mb-4 modal-input${error ? '-error' : ''} `} placeholder='Enter your password...' />
                     <div className='d-flex justify-content-between' >
                         {/* {props.filter.brand === brand._id ? <img src={checkedBox} alt='checked-box' /> : <img src={checkBox} alt='check-box' />} */}
-                        <div className='cursor-hover'><img src={checkedBox} alt='checked-box' /><span style={{ fontSize: '14px', fontWeight: '300', color: '4d4d4d', fontFamily: 'Montserrat' }} >Remember password</span></div>
-                        <span onClick={() => { props.setLoginShow(false); props.setForgotPassShow(true); }} className='cursor-hover' style={{ fontWeight: '600', fontSize: '14px', fontFamily: 'Montserrat', paddingTop: '3px' }}>Forgot your password?</span>
+                        <div className='cursor-hover'><img src={checkedBox} alt='checked-box' /><span className='text-14 text-regular' >Remember password</span></div>
+                        <span onClick={() => { props.setLoginShow(false); props.setForgotPassShow(true); }} className='cursor-hover text-14' style={{ fontWeight: '600', paddingTop: '3px' }}>Forgot your password?</span>
                     </div>
                     <Button type='submit' className='modal-btn' variant="secondary" disabled={(username != '' && password != '') ? false : true}>Login</Button>
                 </form>
             </Modal.Body>
             <Modal.Footer>
                 Don’t have an account?
-                <span className='cursor-hover color-ffa15f text-underline' onClick={onClickSigup}>Register</span>
+                <span className='cursor-hover text-color-orange text-underline' onClick={onClickSigup}>Register</span>
             </Modal.Footer>
         </Modal>
     );

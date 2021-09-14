@@ -14,16 +14,21 @@ function UserProvider({ children }) {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      try {
-        const res = await CallAuthAPI('/user/profile', 'GET', null);
-        if (res.status === 200) {
-          setLoginState({ isAuthenticated: true, profile: res.data })
-        } else {
+      if (!loginState.isAuthenticated) {
+        try {
+          // console.log('user context')
+          // console.log(loginState)
+          const res = await CallAuthAPI('/user/profile', 'GET', null);
+          // console.log(res.data)
+          if (res) {
+            setLoginState({ isAuthenticated: true, profile: res.data })
+          } else {
+            setLoginState({ isAuthenticated: false, profile: null })
+          }
+        } catch (err) {
+          console.log(err)
           setLoginState({ isAuthenticated: false, profile: null })
         }
-      } catch (err) {
-        console.log(err)
-        setLoginState({ isAuthenticated: false, profile: null })
       }
     }
     fetchData();
@@ -85,7 +90,7 @@ function loginUser(dispatch, username, password, history, setIsLoading, setError
 function logoutUser(dispatch, history) {
   localStorage.removeItem(TOKEN);
   dispatch({ type: LOGOUT_SUCCESS, user: null });
-  history.push("/login");
+  history.push("/");
 }
 
 export { UserProvider, useUserState, useUserDispatch, loginUser, logoutUser };

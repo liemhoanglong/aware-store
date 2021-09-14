@@ -51,7 +51,7 @@ export default function Signup(props) {
             <Modal.Header closeButton></Modal.Header>
             <Modal.Body>
                 <center>
-                    <h4 style={{ fontFamily: 'Montserrat', fontSize: '32px', fontWeight: 'bold' }}>Register</h4>
+                    <h4 style={{ fontSize: '32px', fontWeight: 'bold' }}>Register</h4>
                 </center>
                 <form onSubmit={onSubmit} style={{ padding: '27px 80px' }}>
                     <p className='mb-2'><b>NAME</b></p>
@@ -66,16 +66,16 @@ export default function Signup(props) {
                     <input onChange={e => setPassword(e.target.value)} type='password' name='password' className={`modal-input${error === '1' ? '-error' : ''} `} placeholder='Enter your password...' />
                     <p className={`modal-text-error mt-1 ${error === '1' ? '' : 'invisible'}`}>Your passwords must be more than 6 characters!</p>
 
-                    <center className='mt-2 text-14 font-mon'>
+                    <center className='mt-2 text-14'>
                         <p className='m-0'>By creating an account you agree to the</p>
-                        <p className='m-0'><span className='cursor-hover color-ffa15f text-underline'>Terms of Service</span> and <span className='cursor-hover color-ffa15f text-underline'>Privacy Policy</span></p>
+                        <p className='m-0'><span className='cursor-hover text-color-orange text-underline'>Terms of Service</span> and <span className='cursor-hover text-color-orange text-underline'>Privacy Policy</span></p>
                         <Button type='submit' className='modal-btn' variant="secondary" disabled={(username != '' && password != '' && name != '') ? false : true}>Register</Button>
                     </center>
                 </form>
             </Modal.Body>
-            <Modal.Footer className='text-14 font-mon'>
+            <Modal.Footer className='text-14'>
                 <span style={{ fontWeight: '400' }}>Do you have an account?</span>
-                <span className='cursor-hover color-ffa15f text-underline p-0' onClick={onClickLogin}>Log In</span>
+                <span className='cursor-hover text-color-orange text-underline p-0' onClick={onClickLogin}>Log In</span>
             </Modal.Footer>
         </Modal>
     );

@@ -8,7 +8,11 @@
   height: 35px;
   border-radius: 100px;
   border: solid 1px #b7b7b7;
-  color:  #b7b7b7;
+  color: #b7b7b7;
+}
+
+.header-search input:focus{
+  color: #cccccc;
 }
 
 .form-control:focus {
@@ -26,17 +30,22 @@
   margin-top: 7px;
 }
 
+.icon-avatar{
+  width: 28px;
+  height: 28px;
+}
+
 .number-cart{
-  margin-left: 10px;
   position: absolute;
+  top: 0;
   background-color: #ffa15f;
   border-radius: 50%;
   height: 18px;
   width: 18px;
   color:white;
   text-align: center;
-  margin-bottom: 5px;
-  font: 14px Montserrat;
+  margin-left: 10px;
+  font-size: 14px;
 }
 
 .header-button1-custom{
@@ -115,7 +124,6 @@
 .nav-header-dropdown-content {
   padding: 0 18px;
   font-weight: 300;
-  font-family: Montserrat;
   padding-top: 20px;
   padding-bottom: 20px;
   z-index: 2;

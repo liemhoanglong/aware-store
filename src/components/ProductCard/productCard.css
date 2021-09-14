@@ -67,7 +67,6 @@
 .product-card-status div{
     width: 44px;
     color: white;
-    font-family: Montserrat;
     font-size: 10px;
     font-weight: bold;
 }
@@ -80,7 +79,6 @@
 }
 
 .product-card-name-text{
-    font-family: Montserrat;
     font-size: 14px;
     font-weight: 500;
     overflow: hidden;
@@ -96,7 +94,6 @@
 
 .product-card-price-text{
     color: #4d4d4d;
-    font-family: Montserrat;
     font-size: 12px;
     font-weight: 300;
 }

@@ -1,7 +1,7 @@
 .App {
-  text-align: center;
+  font-family: Montserrat;
 }
-
+/* 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -26,8 +26,8 @@
 
 .App-link {
   color: #61dafb;
-}
-
+} */
+/* 
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
@@ -35,7 +35,7 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */
 
 .link-custom {
   text-decoration: none;
@@ -58,8 +58,8 @@
   cursor: pointer;
 }
 
-.color-ffa15f{
-  color: #ffa15f; 
+.text-color-orange{
+  color: #ffa15f!important; 
   font-weight: bold;
 }
 
@@ -109,13 +109,11 @@ input[type='checkbox'].bigcheck:checked + span.bigcheck-target:after {
 .custom-dropdown {
   position: relative;
   display: inline-block;
-  font-family: Montserrat;
 }
 
 .dropdown-content {
   margin-top: 2px;
   font-size: 12px;
-  font-family: Montserrat;
   display: none;
   position: absolute;
   background-color: #f9f9f9;
@@ -138,7 +136,8 @@ input[type='checkbox'].bigcheck:checked + span.bigcheck-target:after {
   background-color: #fbfbfb
 }
 
-.custom-dropdown:hover .dropdown-content {
+.custom-dropdown:hover .dropdown-content,
+.custom-dropdown:hover .dropdown-content-right {
   display: block;
 }
 
@@ -151,8 +150,39 @@ input[type='checkbox'].bigcheck:checked + span.bigcheck-target:after {
   transition: .5s ease-in-out;
 }
 
-.bg-fafafa{
+.dropdown-content-right{
+  padding-top: 20px;
+  font-size: 12px;
+  right: 0;
+  display: none;
+  position: absolute;
+  min-width: 181px;
+  /* box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
+  z-index: 1;
+}
+
+.dropdown-content-group-right{
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+}
+
+.dropdown-content-right .dropdown-item-right{
+  cursor: pointer;
+  padding: 8px 16px;
+  display: block;
+  border-top: .5px solid rgba(211, 211, 211, 0.5);
+  background-color: white;
+}
+
+.dropdown-item-right:hover{
+  background-color: #fbfbfb
+}
+
+.bg-white{
   background-color: #fafafa;
+}
+
+.bg-orange{
+  background-color: #ffa15f;
 }
 
 .modal-btn{
@@ -172,6 +202,7 @@ input[type='checkbox'].bigcheck:checked + span.bigcheck-target:after {
   background-color: #f6f6f6;
   height: 46px;
   padding: 24px;
+  font-size: 14px;
 }
 
 .modal-input-error{
@@ -192,13 +223,11 @@ input[type='checkbox'].bigcheck:checked + span.bigcheck-target:after {
 
 .modal-text-error{
   color:#f63f45;
-  font-family: Montserrat;
   font-size: 10px;
   font-weight: 500;
 }
 
 .model-lable{
-  font-family: Montserrat;
   font-size: 12px;
   font-weight: 500;
 }
@@ -226,11 +255,62 @@ input[type='checkbox'].bigcheck:checked + span.bigcheck-target:after {
   border-bottom: 2px solid #ffa15f;
 }
 
+.text-12{
+  font-size: 12px;
+}
+
 .text-14{
   font-size: 14px;
 }
 
-.font-mon{
-  font-family: Montserrat;
+.text-regular{
+  font-weight: 400;
+  color: #4d4d4dad;
 }
 
+.text-success{
+  color: rgba(56, 247, 56, 0.733)
+}
+
+.profile-wrapper{
+  max-width: 430px;
+}
+
+.jumbotron{
+  width: 100%;
+  background-color: #f9f9f9;
+  padding: 50px;
+}
+
+.profile-input{
+  width: 100%;
+  border: none;
+  height: 46px;
+  padding: 24px;
+}
+
+.profile-btn-save{
+  width: 120px;
+  border: none;
+  background-color: #ff8c3a;
+  padding: 8px 24px;
+  border-radius: 0;
+}
+
+.profile-btn-save:hover{
+  background: #ffa15f;
+}
+
+.profile-btn-cancel{
+  width: 120px;
+  border: none;
+  background-color: transparent;
+  padding: 8px 24px;
+  border-radius: 0;
+  color: #202124;
+}
+
+
+.profile-btn-cancel:hover{
+  background: #f63f45;
+}

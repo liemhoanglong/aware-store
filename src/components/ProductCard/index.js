@@ -12,7 +12,7 @@ export default function ProductCard(props) {
             <div>
                 <div className='product-card-img'>
                     <Link to={`/product-item/${props.product._id}`} className='link-custom '>
-                        <img src={porductImage} alt='asfd' />
+                        <img src={props.product.imageList.length > 0 ? props.product.imageList[0] : porductImage} alt='asfd' />
                     </Link>
                     <div className='product-card-btn'>
                         + Quick shop

@@ -5,12 +5,17 @@ import { Link, useHistory } from 'react-router-dom';
 import './header.css';
 import logo from '../../images/logo.svg';
 import cart from '../../images/cart.svg';
+import avatar from '../../images/avatar.jpg';
 import arrowDown from '../../images/arrow-down.svg';
 import Login from "../Login";
 import Signup from "../Signup";
 import ForgotPass from "../ForgotPass";
+import { logoutUser, useUserDispatch } from "../../contexts/UserContext";
 
 export default function Header(props) {
+    // const { isAuthenticated, profile } = useUserState();
+    const userDispatch = useUserDispatch();
+
     const catelists = props.catelists;
     const [search, setSearch] = useState('');
 
@@ -54,6 +59,7 @@ export default function Header(props) {
                     <Col>
                         <Form className='header-search d-flex' onSubmit={(e) => onSearch(e)}>
                             <FormControl
+                                className='text-14'
                                 type="text"
                                 placeholder="search"
                                 value={search}
@@ -72,24 +78,42 @@ export default function Header(props) {
                     <Col>
                         <div className='d-flex justify-content-end'>
                             {props.user ?
-                                <div>
-                                    <img src={props.user.avatar} />
+                                <div className='ms-4 d-flex '>
+                                    <div className='custom-dropdown cursor-hover'>
+                                        <div className='bg-orange rounded-circle' style={{ padding: '2px', marginTop: '2px' }}>
+                                            <img className='icon-avatar rounded-circle' src={avatar} alt='cart' />
+                                        </div>
+                                        <div className="dropdown-content-right">
+                                            <div className='dropdown-content-group-right' style={{ marginTop: '-2px' }}>
+                                                <Link to='/profile/setting' className='link-custom dropdown-item-right'>Account setting</Link>
+                                                <div onClick={() => logoutUser(userDispatch, history)} className='dropdown-item-right'>Logout</div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 : <>
-                                    <Button onClick={() => setSignupShow(true)} className='header-button1-custom' variant="outline">Register</Button>
-                                    <Button onClick={() => setLoginShow(true)} className='header-button2-custom' variant="outline">Log In</Button>
+                                    <Button onClick={() => setSignupShow(true)} className='header-button1-custom text-14' variant="outline">Register</Button>
+                                    <Button onClick={() => setLoginShow(true)} className='header-button2-custom text-14' variant="outline">Log In</Button>
                                 </>
                             }
-                            <Link to="/cart" className='link-custom'>
-                                <div className='d-flex ms-4'>
+
+                            <div className='ms-4 d-flex '>
+                                <div className='custom-dropdown cursor-hover'>
                                     <img className='icon-cart' src={cart} alt='cart' />
                                     {props.user && props.user.cart.length > 0 &&
                                         <div className='number-cart'>
-                                            props.user.cart.length
+                                            {props.user.cart.length}
                                         </div>
                                     }
+                                    <div className="dropdown-content-right">
+                                        <div className='dropdown-content-group-right'>
+                                            <div className='dropdown-item-right'>Link 1</div>
+                                            <div className='dropdown-item-right'>Link 2</div>
+                                            <Link to='/cart' className='link-custom dropdown-item-right text-color-orange text-center py-4'>View cart</Link>
+                                        </div>
+                                    </div>
                                 </div>
-                            </Link>
+                            </div>
                             {/* <button type="button" className="btn btn-primary position-relative">
                                 Mails <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-secondary">9 <span className="visually-hidden">unread messages</span></span>
                             </button> */}
@@ -97,7 +121,7 @@ export default function Header(props) {
                     </Col>
                 </Row>
             </Container>
-            <hr style={{ color: 'lightgray', boxShadow: '.1px 0 .7px rgba(0, 0, 0, 2)' }} />
+            <hr className='mt-0' style={{ color: 'lightgray', boxShadow: '.1px 0 .7px rgba(0, 0, 0, 2)' }} />
             {/* nav bar */}
             <Container>
                 <div className='nav-header d-flex justify-content-center position-relative'>
@@ -140,6 +164,6 @@ export default function Header(props) {
                 </div>
             </Container>
             <hr style={{ color: 'lightgray', marginTop: '-10px', boxShadow: '0 .1px .7px 0 rgba(0, 0, 0, 2)' }} />
-        </header>
+        </header >
     )
 }

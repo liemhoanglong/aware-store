@@ -1,18 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { Row, Col } from 'react-bootstrap';
+import QueryString from 'query-string';
 
 import './styles.css'
 import arrowDown from '../../images/arrow-down.svg';
 import MultiRangeSlider from '../MultiRangeSlider';
 import checkedBox from '../../images/checked-box.svg';
 import checkBox from '../../images/check-box.svg';
-import { Row, Col } from 'react-bootstrap';
+import CallAPI from '../../services/CallAPI';
 
 const SideBar = (props) => {
   // console.log('sidebar');
   let history = useHistory();
   const [minValue, setMinValue] = useState(props.filter.minprice);
   const [maxValue, setMaxValue] = useState(props.filter.maxprice);
+  const [cates, setCates] = useState([])
+  console.log(cates)
+
+  useEffect(() => {
+    const fetchAll = async () => {
+      try {
+        let queryObject = QueryString.parse(history.location.search);
+        let res = await CallAPI(`/cate${queryObject.categroup === undefined ? '' : ('/by-group/' + props.filter.categroup)}`, 'get', null);
+        setCates(res.data.data);
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    fetchAll();
+  }, [])
 
   const handleChangeFilterPrice = () => {
     props.handleChangeFilter({ minprice: minValue, maxprice: maxValue })
@@ -58,23 +75,35 @@ const SideBar = (props) => {
     }
   }
 
+  const handleChangeCate = (cate) => {
+    // console.log('onclick  ' + cate)
+    if (props.filter.cate === cate) {
+      props.handleChangeFilter({ cate: '' })
+    }
+    else {
+      props.handleChangeFilter({ cate })
+    }
+  }
+
   return (
     <div>
-      <h5>Category</h5>
+      <h6>Category</h6>
       <br />
-      <div className='categroup'>All {'dresses'}</div>
+      <p onClick={() => handleChangeCate('')} className={`cursor-hover text-14 text-regular ${props.filter.cate === '' ? 'text-color-orange' : ''}`}>All {props.categroup ? props.categroup : 'category'}</p>
       <div className="line-litle"></div>
       <div className='cate'>
-        <p className='m-0'>Rompers / Jumpsuits</p>
-        <p className='m-0'>Casual dresses</p>
-        <p className='m-0'>Going out dresses</p>
+        {cates.map((cate) => (
+          <p onClick={() => handleChangeCate(cate._id)} key={cate._id} className={`m-0 text-14 text-regular cursor-hover ${props.filter.cate === cate._id ? 'text-color-orange ' : ''}`}>{cate.name}</p>
+        ))}
+        {/* <p className='m-0 text-14 text-regular'>Casual dresses</p> */}
+        {/* <p className='m-0 text-14 text-regular'>Going out dresses</p> */}
       </div>
       <div className="line"></div>
-      <h5>Filter</h5>
+      <h6>Filter</h6>
       <br />
       <div className='cursor-hover product-filter-size'>
         <div className='d-flex justify-content-between'>
-          <span>Size</span>
+          <span className='text-14 text-regular'>Size</span>
           <img src={arrowDown} className='product-filter-size-arrow-down' />
         </div>
         <div className='cursor-hover product-filter-size-items'>
@@ -87,7 +116,7 @@ const SideBar = (props) => {
       <hr className='my-2' />
       <div className='cursor-hover product-filter-color'>
         <div className='d-flex justify-content-between'>
-          <span>Color</span>
+          <span className='text-14 text-regular'>Color</span>
           <img src={arrowDown} className='product-filter-color-arrow-down' />
         </div>
         <div className='product-filter-color-items'>
@@ -117,23 +146,23 @@ const SideBar = (props) => {
       <hr className='my-2' />
       <div className='cursor-hover product-filter-brand'>
         <div className='d-flex justify-content-between'>
-          <span>Brand</span>
+          <span className='text-14 text-regular'>Brand</span>
           <img src={arrowDown} className='product-filter-brand-arrow-down' />
         </div>
         <div className='product-filter-brand-items'>
           <div className="line-dash"></div>
           {props.brandData && props.brandData.map((brand) => (
-            <div onClick={() => handleChangeBrand(brand._id)} key={brand._id} className='product-filter-brand-item d-flex justify-content-between align-items-center p-2 mb-1 bg-fafafa'>
-              <span className='cursor-hover w-100'>{brand.name}</span>
+            <div onClick={() => handleChangeBrand(brand._id)} key={brand._id} className='product-filter-brand-item d-flex justify-content-between align-items-center p-2 mb-1 bg-white'>
+              <span className={`cursor-hover w-100 text-14 ${props.filter.brand === brand._id ? 'text-color-orange' : ''}`}>{brand.name}</span>
               {props.filter.brand === brand._id ? <img src={checkedBox} alt='checked-box' /> : <img src={checkBox} alt='check-box' />}
             </div>
           ))}
-          <div onClick={() => handleChangeBrand('61363fc80fc94302bcc7b7ec')} className='product-filter-brand-item d-flex justify-content-between align-items-center p-2 mb-1 bg-fafafa'>
-            <span className='cursor-hover w-100'>SWE</span>
+          <div onClick={() => handleChangeBrand('61363fc80fc94302bcc7b7ec')} className='product-filter-brand-item d-flex justify-content-between align-items-center p-2 mb-1 bg-white'>
+            <span className='cursor-hover w-100 text-14'>SWE</span>
             {props.filter.brand === '61363fc80fc94302bcc7b7ec' ? <img src={checkedBox} alt='checked-box' /> : <img src={checkBox} alt='check-box' />}
           </div>
-          <div onClick={() => handleChangeBrand('61363fc80fc94323qcc7b7ec')} className='product-filter-brand-item d-flex justify-content-between align-items-center p-2 mb-1 bg-fafafa'>
-            <span className='cursor-hover w-100'>POLO</span>
+          <div onClick={() => handleChangeBrand('61363fc80fc94323qcc7b7ec')} className='product-filter-brand-item d-flex justify-content-between align-items-center p-2 mb-1 bg-white'>
+            <span className='cursor-hover w-100 text-14'>POLO</span>
             {props.filter.brand === '61363fc80fc94323qcc7b7ec' ? <img src={checkedBox} alt='checked-box' /> : <img src={checkBox} alt='check-box' />}
           </div>
         </div>
@@ -141,7 +170,7 @@ const SideBar = (props) => {
       <hr className='my-2' />
       <div className='cursor-hover product-filter-price'>
         <div className='d-flex justify-content-between'>
-          <span>Price</span>
+          <span className='text-14 text-regular'>Price</span>
           <img src={arrowDown} className='product-filter-price-arrow-down' />
         </div>
         <div className='product-filter-price-items'>
@@ -164,22 +193,22 @@ const SideBar = (props) => {
       <hr className='my-2' />
       <div className='cursor-hover product-filter-available'>
         <div className='d-flex justify-content-between'>
-          <span>Available</span>
+          <span className='text-14 text-regular'>Available</span>
           <img src={arrowDown} className='product-filter-available-arrow-down' />
         </div>
         <div className='product-filter-available-items'>
           <div className="line-dash"></div>
-          <div onClick={() => handleChangeStatus('1')} className='product-filter-available-item d-flex justify-content-between align-items-center p-2 mb-1 bg-fafafa'>
-            <span className='cursor-hover w-100'>In-store</span>
+          <div onClick={() => handleChangeStatus('1')} className='product-filter-available-item d-flex justify-content-between align-items-center p-2 mb-1 bg-white'>
+            <span className={`cursor-hover w-100 text-14 ${props.filter.status === '1' ? 'text-color-orange' : ''}`}>In-store</span>
             {props.filter.status === '1' ? <img src={checkedBox} alt='checked-box' /> : <img src={checkBox} alt='check-box' />}
           </div>
-          <div onClick={() => handleChangeStatus('0')} className='product-filter-available-item d-flex justify-content-between align-items-center p-2 mb-1 bg-fafafa'>
-            <span className='cursor-hover w-100'>Out of stock</span>
+          <div onClick={() => handleChangeStatus('0')} className='product-filter-available-item d-flex justify-content-between align-items-center p-2 mb-1 bg-white'>
+            <span className={`cursor-hover w-100 text-14 ${props.filter.status === '0' ? 'text-color-orange' : ''}`}>Out of stock</span>
             {props.filter.status === '0' ? <img src={checkedBox} alt='checked-box' /> : <img src={checkBox} alt='check-box' />}
           </div>
         </div>
       </div>
-    </div>
+    </div >
   )
 }
 

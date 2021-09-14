@@ -106,6 +106,7 @@ export default function ProductList(props) {
         value.status != undefined && (queryObject.status = value.status);
         value.page != undefined && (queryObject.page = value.page);
         value.sort != undefined && (queryObject.sort = value.sort);
+        value.cate != undefined && (queryObject.cate = value.cate);
         const keys = Object.keys(queryObject);
         let queryString = '';
         for (let i = 0; i < keys.length; i++) {
@@ -123,6 +124,7 @@ export default function ProductList(props) {
     const handleChangePage = (page) => {
         // console.log('onclick ' + page)
         if (page < 1) page = 1;
+        if (page > Math.ceil(productData.count / 20)) page = Math.ceil(productData.count / 20);
         setFilter(prevState => ({
             ...prevState,
             page
@@ -132,9 +134,9 @@ export default function ProductList(props) {
 
     const handleClickPrePage = () => {
         let page = filter.page;
+        // console.log('onclick Pre Page ' + page)
+        if (page - 1 < 1) return;
         --page;
-        console.log('onclick Pre Page ' + page)
-        if (page < 1) page = 1;
         setFilter(prevState => ({
             ...prevState,
             page
@@ -144,9 +146,9 @@ export default function ProductList(props) {
 
     const handleClickNextPage = () => {
         let page = filter.page;
-        ++page;
-        console.log('onclick Next Page ' + page)
-        if (page < 1) page = 1;
+        // console.log('onclick Next Page ' + page)
+        if (page + 1 > productData.count) return;
+        ++page
         setFilter(prevState => ({
             ...prevState,
             page
@@ -164,7 +166,7 @@ export default function ProductList(props) {
             {/* <Progress isLoad={load} /> */}
             <Row>
                 <center>
-                    <h1 className='my-4' style={{ fontFamily: 'Montserrat', fontSize: '14px' }}>
+                    <h1 className='my-4 text-14' >
                         {filter.catelist === '6136342577e31326701a18fd' ? 'Men' : filter.catelist === '6136343677e31326701a1901' ? 'Ladies' : filter.catelist === '6136343b77e31326701a1903' ? 'Girls' : filter.catelist === '' ? '' : 'Boys'}
                         {categroup != '' ? ' / ' + categroup : ''}
                     </h1>
@@ -174,6 +176,7 @@ export default function ProductList(props) {
                         brandData={brandData}
                         setFilter={setFilter}
                         filter={filter}
+                        categroup={categroup}
                         handleChangeFilter={handleChangeFilter}
                     />
                 </Col>
