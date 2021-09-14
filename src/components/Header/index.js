@@ -10,10 +10,10 @@ import arrowDown from '../../images/arrow-down.svg';
 import Login from "../Login";
 import Signup from "../Signup";
 import ForgotPass from "../ForgotPass";
-import { logoutUser, useUserDispatch } from "../../contexts/UserContext";
+import { useUserState, logoutUser, useUserDispatch } from "../../contexts/UserContext";
 
 export default function Header(props) {
-    // const { isAuthenticated, profile } = useUserState();
+    const { isAuthenticated } = useUserState();
     const userDispatch = useUserDispatch();
 
     const catelists = props.catelists;
@@ -77,7 +77,7 @@ export default function Header(props) {
                     </Col>
                     <Col>
                         <div className='d-flex justify-content-end'>
-                            {props.user ?
+                            {isAuthenticated ?
                                 <div className='ms-4 d-flex '>
                                     <div className='custom-dropdown cursor-hover'>
                                         <div className='bg-orange rounded-circle' style={{ padding: '2px', marginTop: '2px' }}>
@@ -100,16 +100,16 @@ export default function Header(props) {
                             <div className='ms-4 d-flex '>
                                 <div className='custom-dropdown cursor-hover'>
                                     <img className='icon-cart' src={cart} alt='cart' />
-                                    {props.user && props.user.cart.length > 0 &&
+                                    {props.cart.totalProducts > 0 &&
                                         <div className='number-cart'>
-                                            {props.user.cart.length}
+                                            {props.cart.totalProducts}
                                         </div>
                                     }
                                     <div className="dropdown-content-right">
                                         <div className='dropdown-content-group-right'>
                                             <div className='dropdown-item-right'>Link 1</div>
                                             <div className='dropdown-item-right'>Link 2</div>
-                                            <Link to='/cart' className='link-custom dropdown-item-right text-color-orange text-center py-4'>View cart</Link>
+                                            <Link to='/shopping-cart' className='link-custom dropdown-item-right text-color-orange text-center py-4'>View cart</Link>
                                         </div>
                                     </div>
                                 </div>

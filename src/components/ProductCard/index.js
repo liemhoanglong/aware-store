@@ -14,9 +14,9 @@ export default function ProductCard(props) {
                     <Link to={`/product-item/${props.product._id}`} className='link-custom '>
                         <img src={props.product.imageList.length > 0 ? props.product.imageList[0] : porductImage} alt='asfd' />
                     </Link>
-                    <div className='product-card-btn'>
+                    <Link to={`/product-item/${props.product._id}`} className='link-custom product-card-btn'>
                         + Quick shop
-                    </div>
+                    </Link>
                     {!props.product.status &&
                         <div className='product-card-status'>
                             <div className='centered'>

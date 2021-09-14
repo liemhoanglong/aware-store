@@ -87,7 +87,6 @@
     -webkit-line-clamp: 2;
     word-break: break-word;
     -webkit-box-orient: vertical;  
-    overflow: hidden;
     margin-top: 10px;
     margin-bottom: 0;
 }

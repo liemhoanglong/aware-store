@@ -12,7 +12,6 @@ export default function ProductList(props) {
     // console.log('product page');
     const location = useLocation();
     const history = useHistory();
-    let totalpage = 0;
     const [brandData, setBrandData] = useState([]);
     const [categroup, setCategroup] = useState('');
     const [load, setLoad] = useState(true);
@@ -32,15 +31,18 @@ export default function ProductList(props) {
     });
     const [productData, setProductData] = useState(null);
 
-    useEffect(async () => {
-        try {
-            let callBrand = CallAPI('/brand', 'get', null);
-            let res = await callBrand;
-            setBrandData(res.data.data);
-        } catch (err) {
-            console.log(err)
-        }
-        setLoad(false);
+    useEffect(() => {
+        const fetchAll = async () => {
+            try {
+                let callBrand = CallAPI('/brand', 'get', null);
+                let res = await callBrand;
+                setBrandData(res.data.data);
+            } catch (err) {
+                console.log(err)
+            }
+            setLoad(false);
+        };
+        fetchAll();
     }, [])
 
     //when location change set the filter and callApi

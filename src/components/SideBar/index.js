@@ -110,7 +110,7 @@ const SideBar = (props) => {
       <div className='cursor-hover product-filter-size'>
         <div className='d-flex justify-content-between'>
           <span className='text-14 text-regular'>Size</span>
-          <img src={arrowDown} className='product-filter-size-arrow-down' />
+          <img src={arrowDown} alt='Arrow down' className='product-filter-size-arrow-down' />
         </div>
         <div className='cursor-hover product-filter-size-items'>
           <div className="line-dash"></div>
@@ -123,7 +123,7 @@ const SideBar = (props) => {
       <div className='cursor-hover product-filter-color'>
         <div className='d-flex justify-content-between'>
           <span className='text-14 text-regular'>Color</span>
-          <img src={arrowDown} className='product-filter-color-arrow-down' />
+          <img src={arrowDown} alt='Arrow down' className='product-filter-color-arrow-down' />
         </div>
         <div className='product-filter-color-items'>
           <div className="line-dash"></div>
@@ -153,7 +153,7 @@ const SideBar = (props) => {
       <div className='cursor-hover product-filter-brand'>
         <div className='d-flex justify-content-between'>
           <span className='text-14 text-regular'>Brand</span>
-          <img src={arrowDown} className='product-filter-brand-arrow-down' />
+          <img src={arrowDown} alt='Arrow down' className='product-filter-brand-arrow-down' />
         </div>
         <div className='product-filter-brand-items'>
           <div className="line-dash"></div>
@@ -177,7 +177,7 @@ const SideBar = (props) => {
       <div className='cursor-hover product-filter-price'>
         <div className='d-flex justify-content-between'>
           <span className='text-14 text-regular'>Price</span>
-          <img src={arrowDown} className='product-filter-price-arrow-down' />
+          <img src={arrowDown} alt='Arrow down' className='product-filter-price-arrow-down' />
         </div>
         <div className='product-filter-price-items'>
           <div className="line-dash"></div>
@@ -200,7 +200,7 @@ const SideBar = (props) => {
       <div className='cursor-hover product-filter-available'>
         <div className='d-flex justify-content-between'>
           <span className='text-14 text-regular'>Available</span>
-          <img src={arrowDown} className='product-filter-available-arrow-down' />
+          <img src={arrowDown} alt='Arrow down' className='product-filter-available-arrow-down' />
         </div>
         <div className='product-filter-available-items'>
           <div className="line-dash"></div>
