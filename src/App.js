@@ -104,7 +104,7 @@ function App() {
           <Route path='/profile/:state' exact component={Profile} />
           <Route path='/product-list' exact component={ProductList} />
           <Route
-            path="/product-item/:id"
+            path="/product-info/:id"
             exact
             render={(props) => (
               <ProductInfo {...props} cart={cart} setUpdateCart={setUpdateCart} />

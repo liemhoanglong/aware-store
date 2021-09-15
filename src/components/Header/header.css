@@ -7,12 +7,11 @@
   width: 181px;
   height: 35px;
   border-radius: 100px;
-  border: solid 1px #b7b7b7;
-  color: #b7b7b7;
+  border: solid 2px #cccccc;
 }
 
 .header-search input:focus{
-  color: #cccccc;
+  color: #202124;
 }
 
 .form-control:focus {
@@ -132,4 +131,13 @@
 
 .nav-header-dropdown-content:hover {
   background-color: #eaeaea;
+}
+
+.dropdown-cart-item-name{
+  overflow: hidden;
+  display: -webkit-box;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  word-break: break-word;
+  -webkit-box-orient: vertical;  
 }

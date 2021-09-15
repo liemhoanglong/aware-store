@@ -11,10 +11,10 @@ export default function ProductCard(props) {
         <div className='product-card-wapper d-flex flex-column justify-content-end ms-4 mt-3'>
             <div>
                 <div className='product-card-img'>
-                    <Link to={`/product-item/${props.product._id}`} className='link-custom '>
+                    <Link to={`/product-info/${props.product._id}`} className='link-custom' title={props.product.name}>
                         <img src={props.product.imageList.length > 0 ? props.product.imageList[0] : porductImage} alt='asfd' />
                     </Link>
-                    <Link to={`/product-item/${props.product._id}`} className='link-custom product-card-btn'>
+                    <Link to={`/product-info/${props.product._id}`} className='link-custom product-card-btn'>
                         + Quick shop
                     </Link>
                     {!props.product.status &&
@@ -26,7 +26,7 @@ export default function ProductCard(props) {
                     }
                 </div>
                 <div>
-                    <Link to={`/product-item/${props.product._id}`} className='link-custom product-card-name-text'>{props.product.name}</Link>
+                    <Link to={`/product-info/${props.product._id}`} className='link-custom product-card-name-text' title={props.product.name}>{props.product.name}</Link>
                 </div>
             </div>
             <p className='product-card-price-text m-0'>${props.product.price}</p>

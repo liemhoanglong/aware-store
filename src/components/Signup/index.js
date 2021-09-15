@@ -20,7 +20,7 @@ export default function Signup(props) {
             let res
             try {
                 res = await CallAPI('/user/register', 'post', { name, username, password })
-                props.setSignupShow(false);
+                props.onHide();
             } catch (err) {
                 if (err.response.data.err === 'This username already exists!') {
                     setError('2');
@@ -35,8 +35,8 @@ export default function Signup(props) {
     }
 
     const onClickLogin = () => {
-        props.setSignupShow(false);
-        props.setLoginShow(true);
+        props.onHide();
+        props.setLoginShow();
     }
 
     return (

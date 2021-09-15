@@ -23,8 +23,8 @@ export default function ForgotPass(props) {
     }
 
     const onClickLogin = () => {
-        props.setForgotPassShow(false);
-        props.setLoginShow(true);
+        props.onHide();
+        props.setLoginShow();
     }
 
     return (

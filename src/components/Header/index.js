@@ -38,21 +38,19 @@ export default function Header(props) {
             <Login
                 show={loginShow}
                 onHide={() => setLoginShow(false)}
-                setSignupShow={setSignupShow}
-                setLoginShow={setLoginShow}
-                setForgotPassShow={setForgotPassShow}
+                setSignupShow={() => setSignupShow(true)}
+                setLoginShow={() => setLoginShow(true)}
+                setForgotPassShow={() => setForgotPassShow(true)}
             />
             <Signup
                 show={signupShow}
                 onHide={() => setSignupShow(false)}
-                setSignupShow={setSignupShow}
-                setLoginShow={setLoginShow}
+                setLoginShow={() => setLoginShow(true)}
             />
             <ForgotPass
                 show={forgotPassShow}
                 onHide={() => setForgotPassShow(false)}
-                setLoginShow={setLoginShow}
-                setForgotPassShow={setForgotPassShow}
+                setLoginShow={() => setLoginShow(true)}
             />
             <Container>
                 <Row className='header-group'>
@@ -107,8 +105,18 @@ export default function Header(props) {
                                     }
                                     <div className="dropdown-content-right">
                                         <div className='dropdown-content-group-right'>
-                                            <div className='dropdown-item-right'>Link 1</div>
-                                            <div className='dropdown-item-right'>Link 2</div>
+                                            {props.cart && props.cart.cart.map(item => (
+                                                <Link to={`/product-info/${item.productId._id}`} key={item.productId._id} className='d-flex dropdown-item-right link-custom'>
+                                                    <img className='img-cover' width='60px' height='60px' src={item.productId.imageList[0]} alt={item.productId.name} />
+                                                    <div style={{ width: '200px', padding: '5px 5px 5px 20px' }} className='d-flex flex-column justify-content-between'>
+                                                        <span className='dropdown-cart-item-name'>{item.productId.name}</span>
+                                                        <div className='d-flex justify-content-between'>
+                                                            <span className='dropdown-cart-item-name text-regular'>${item.productId.price}</span>
+                                                            <span className='dropdown-cart-item-name text-regular'>{item.size} - {item.color.name} - {item.quantity}psc</span>
+                                                        </div>
+                                                    </div>
+                                                </Link>
+                                            ))}
                                             <Link to='/shopping-cart' className='link-custom dropdown-item-right text-color-orange text-center py-4'>View cart</Link>
                                         </div>
                                     </div>

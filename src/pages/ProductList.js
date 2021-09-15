@@ -4,9 +4,14 @@ import { Container, Row, Col } from 'react-bootstrap';
 import QueryString from 'query-string';
 
 import SideBar from '../components/SideBar';
+import Progress from '../components/Progress';
 import ProductCard from '../components/ProductCard';
+import Paginate from '../components/Paginate';
 import arrowDown from '../images/arrow-down.svg';
 import CallAPI from '../services/CallAPI';
+import config from '../constants/config';
+
+const { LIMIT } = config;
 
 export default function ProductList(props) {
     // console.log('product page');
@@ -27,7 +32,7 @@ export default function ProductList(props) {
         minprice: 0,
         maxprice: 10000,
         status: '',
-        sort: ''
+        sort: '',
     });
     const [productData, setProductData] = useState(null);
 
@@ -47,7 +52,7 @@ export default function ProductList(props) {
 
     //when location change set the filter and callApi
     useEffect(() => {
-        // setLoad(true);
+        setLoad(true);
         const fetchData = async () => {
             let queryObject = QueryString.parse(location.search);
             // console.log(queryObject)
@@ -79,7 +84,7 @@ export default function ProductList(props) {
                 sort: queryObject.sort
             }));
             try {
-                let resProduct = CallAPI(`/product/search?name=${queryObject.name}&brand=${queryObject.brand}&catelist=${queryObject.catelist}&categroup=${queryObject.categroup}&cate=${queryObject.cate}&color=${queryObject.color}&size=${queryObject.size}&minprice=${queryObject.minprice}&maxprice=${queryObject.maxprice}&status=${queryObject.status}&sort=${queryObject.sort}&page=${queryObject.page}`, 'GET', null);
+                let resProduct = CallAPI(`/product/search?name=${queryObject.name}&brand=${queryObject.brand}&catelist=${queryObject.catelist}&categroup=${queryObject.categroup}&cate=${queryObject.cate}&color=${queryObject.color}&size=${queryObject.size}&minprice=${queryObject.minprice}&maxprice=${queryObject.maxprice}&status=${queryObject.status}&sort=${queryObject.sort}&page=${queryObject.page}&limit=${LIMIT}`, 'GET', null);
                 // console.log(res.data)
                 let resCategroup = '';
                 if (queryObject.categroup != '') {
@@ -91,6 +96,7 @@ export default function ProductList(props) {
                 setCategroup(resCategroupData.data.data.name);
             } catch (err) {
                 console.log(err)
+                setLoad(false);
             }
             setLoad(false);
         }
@@ -126,7 +132,7 @@ export default function ProductList(props) {
     const handleChangePage = (page) => {
         // console.log('onclick ' + page)
         if (page < 1) page = 1;
-        if (page > Math.ceil(productData.count / 20)) page = Math.ceil(productData.count / 20);
+        if (page > Math.ceil(productData.count / LIMIT)) page = Math.ceil(productData.count / LIMIT);
         setFilter(prevState => ({
             ...prevState,
             page
@@ -165,7 +171,7 @@ export default function ProductList(props) {
 
     return (
         <Container>
-            {/* <Progress isLoad={load} /> */}
+            <Progress isLoad={load} />
             <Row>
                 <center>
                     <h1 className='my-4 text-14' >
@@ -197,11 +203,14 @@ export default function ProductList(props) {
                             </div>
                         </div>
                         {(productData && productData.count) ?
-                            <div className='d-flex align-self-center'>
-                                <img onClick={handleClickPrePage} className='rotate-left cursor-hover' src={arrowDown} alt='arrow-left' />
-                                <input name='page' value={filter.page} onChange={(e) => handleChangePage(e.target.value)} style={{ border: 'none', width: '30px', textAlign: 'right', marginTop: '-1px' }} />/{productData && productData.count ? Math.ceil(productData.count / 20) : '1'}
-                                <img onClick={handleClickNextPage} className='rotate-right cursor-hover ms-3' src={arrowDown} alt='arrow-right' />
-                            </div>
+                            <Paginate
+                                handleClickPrePage={handleClickPrePage}
+                                handleClickNextPage={handleClickNextPage}
+                                page={filter.page}
+                                handleChangePage={handleChangePage}
+                                data={productData}
+                                limit={LIMIT}
+                            />
                             : null
                         }
                     </div>
@@ -214,11 +223,14 @@ export default function ProductList(props) {
                         <div>
                         </div>
                         {(productData && productData.count) ?
-                            <div className='d-flex align-self-center'>
-                                <img onClick={handleClickPrePage} className='rotate-left cursor-hover' src={arrowDown} alt='arrow-left' />
-                                <input name='page' value={filter.page} onChange={(e) => handleChangePage(e.target.value)} style={{ border: 'none', width: '30px', textAlign: 'right', marginTop: '-1px' }} />/{productData && productData.count ? Math.ceil(productData.count / 20) : '1'}
-                                <img onClick={handleClickNextPage} className='rotate-right cursor-hover ms-3' src={arrowDown} alt='arrow-right' />
-                            </div>
+                            <Paginate
+                                handleClickPrePage={handleClickPrePage}
+                                handleClickNextPage={handleClickNextPage}
+                                page={filter.page}
+                                handleChangePage={handleChangePage}
+                                data={productData}
+                                limit={LIMIT}
+                            />
                             : null
                         }
                     </div>

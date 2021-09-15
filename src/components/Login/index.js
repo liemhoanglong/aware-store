@@ -21,13 +21,8 @@ export default function Login(props) {
         loginUser(userDispatch, username, password, props.history, setLoad, setError)
     }
 
-    const onClickSigup = () => {
-        props.setLoginShow(false);
-        props.setSignupShow(true);
-    }
-
     if (isAuthenticated) {
-        props.setLoginShow(false);
+        props.onHide();
     }
 
     return (
@@ -54,14 +49,14 @@ export default function Login(props) {
                     <div className='d-flex justify-content-between' >
                         {/* {props.filter.brand === brand._id ? <img src={checkedBox} alt='checked-box' /> : <img src={checkBox} alt='check-box' />} */}
                         <div className='cursor-hover'><img src={checkedBox} alt='checked-box' /><span className='text-14 text-regular' >Remember password</span></div>
-                        <span onClick={() => { props.setLoginShow(false); props.setForgotPassShow(true); }} className='cursor-hover text-14' style={{ fontWeight: '600', paddingTop: '3px' }}>Forgot your password?</span>
+                        <span onClick={() => { props.onHide(); props.setForgotPassShow(); }} className='cursor-hover text-14' style={{ fontWeight: '600', paddingTop: '3px' }}>Forgot your password?</span>
                     </div>
                     <Button type='submit' className='modal-btn' variant="secondary" disabled={(username != '' && password != '') ? false : true}>Login</Button>
                 </form>
             </Modal.Body>
             <Modal.Footer>
                 Don’t have an account?
-                <span className='cursor-hover text-color-orange text-underline' onClick={onClickSigup}>Register</span>
+                <span className='cursor-hover text-color-orange text-underline' onClick={() => { props.onHide(); props.setSignupShow(); }}>Register</span>
             </Modal.Footer>
         </Modal>
     );
