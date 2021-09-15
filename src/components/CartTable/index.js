@@ -6,69 +6,78 @@ import './CartTable.css';
 import { useUserState } from "../../contexts/UserContext";
 import CallAuthAPI from '../../services/CallAuthAPI';
 import Progress from '../Progress';
+import Accept from '../Accept';
 
 export default function CartTable(props) {
     const { isAuthenticated } = useUserState();
     const [load, setLoad] = useState(false);
+    const [acceptShow, setAcceptShow] = useState(false);
+    const [productIndex, setproductIndex] = useState(-1);
     const history = useHistory();
 
-    const handleChangeQuantity = async (itemId, qty) => {
-        if (qty < 1 || isNaN(qty)) return
+    const handleChangeQuantity = async (cartIndex, qty) => {
+        if (qty < 1 || isNaN(qty)) return;
         setLoad(true)
-        let cartIndex = -1;
         let cartTemp = JSON.parse(JSON.stringify(props.cart));//clone cart
-        console.log(cartTemp)
-        for (let i = 0; i < cartTemp.length; i++) {
-            if (cartTemp[i]._id === itemId) {
-                cartIndex = i;
-            }
-            delete cartTemp[i]._id;
-            cartTemp[i].productId = cartTemp[i].productId._id;
-        }
+        if (cartTemp.cart[cartIndex].quantity === Number(qty)) return;
         if (cartIndex > -1) {
-            cartTemp[cartIndex].quantity = Number(qty);
+            cartTemp.cart[cartIndex].quantity = Number(qty);
         }
+
+        //change local storage
+        let totalPriceRaw = 0;
+        let totalProducts = 0;
+        for (let i = 0; i < cartTemp.cart.length; i++) {
+            totalPriceRaw += Number(cartTemp.cart[i].productId.price) * Number(cartTemp.cart[i].quantity);
+            totalProducts += Number(cartTemp.cart[i].quantity);
+        }
+        localStorage.setItem('CART', JSON.stringify({ cart: cartTemp.cart, totalPriceRaw, totalProducts }));
+
         if (isAuthenticated) {//CallAuthAPI
             try {
-                let res = await CallAuthAPI('/user/update-cart', 'put', { cart: cartTemp });
-                console.log(res.data);
-                props.setUpdateCart(prevState => (!prevState))
+                let res = await CallAuthAPI('/user/update-cart', 'put', { cart: cartTemp.cart });
+                // console.log(res.data);
             }
             catch (err) {
                 console.log(err);
+                setLoad(false);
             }
-        } else {//change local storage
-            localStorage.setItem('CART', JSON.stringify(cartTemp));
         }
+        props.setUpdateCart(prevState => (!prevState))//update cart
         setLoad(false);
     }
 
-    const handleRemoveProduct = async (itemId) => {
-        setLoad(true)
-        let cartIndex = -1;
-        let cartTemp = JSON.parse(JSON.stringify(props.cart));//clone cart
-        for (let i = 0; i < cartTemp.length; i++) {
-            if (cartTemp[i]._id === itemId) {
-                cartIndex = i;
-            }
-            delete cartTemp[i]._id;
-            cartTemp[i].productId = cartTemp[i].productId._id;
-        }
-        if (cartIndex > -1) {
-            cartTemp.splice(cartIndex, 1);
-        }
-        if (isAuthenticated) {//CallAuthAPI
+    const handleAcceptRemoveProduct = async (cartIndex) => {
+        setAcceptShow(true);
+        setproductIndex(cartIndex)
+    }
 
+    const handleRemoveProduct = async (cartIndex) => {
+        setAcceptShow(false);
+        setLoad(true)
+        let cartTemp = JSON.parse(JSON.stringify(props.cart));//clone cart
+        if (cartIndex > -1) {
+            cartTemp.cart.splice(cartIndex, 1);
+        }
+
+        //change local storage
+        let totalPriceRaw = 0;
+        let totalProducts = 0;
+        for (let i = 0; i < cartTemp.cart.length; i++) {
+            totalPriceRaw += Number(cartTemp.cart[i].productId.price) * Number(cartTemp.cart[i].quantity);
+            totalProducts += Number(cartTemp.cart[i].quantity);
+        }
+        localStorage.setItem('CART', JSON.stringify({ cart: cartTemp.cart, totalPriceRaw, totalProducts }));
+
+        if (isAuthenticated) {//CallAuthAPI
             try {
-                let res = await CallAuthAPI('/user/update-cart', 'put', { cart: cartTemp });
+                let res = await CallAuthAPI('/user/update-cart', 'put', { cart: cartTemp.cart });
                 console.log(res.data);
-                props.setUpdateCart(prevState => (!prevState))
+                props.setUpdateCart(prevState => (!prevState))//update cart
             }
             catch (err) {
                 console.log(err);
             }
-        } else {//change local storage
-            localStorage.setItem('CART', JSON.stringify(cartTemp));
         }
         setLoad(false);
     }
@@ -80,6 +89,12 @@ export default function CartTable(props) {
 
     return (
         <div>
+            <Accept
+                show={acceptShow}
+                onHide={() => setAcceptShow(false)}
+                onAccepted={() => handleRemoveProduct(productIndex)}
+                title='Do you really want to remove this product?'
+            />
             <Progress isLoad={load} />
             <Row >
                 <Col lg={4}>
@@ -110,7 +125,7 @@ export default function CartTable(props) {
                     </Row>
                 </Col>
             </Row>
-            {props.cart.length > 0 && props.cart.map((item) => (
+            {props.cart.cart.length > 0 && props.cart.cart.map((item, idx) => (
                 <Row key={item._id} >
                     <Col lg={12}>
                         <hr className='my-2' />
@@ -122,7 +137,7 @@ export default function CartTable(props) {
                                 <Link to={`product-item/${item.productId._id}`} className='link-custom cart-item-product-col-name'>{item.productId.name}</Link>
                                 <div>
                                     <span onClick={() => handleChangeProduct(item._id)} className='cursor-hover pe-1 text-12' >Change</span>
-                                    <span onClick={() => handleRemoveProduct(item._id)} className='cursor-hover ps-1 text-12' style={{ borderLeft: '.5px solid #979797' }}>Remove</span>
+                                    <span onClick={() => handleAcceptRemoveProduct(idx)} className='cursor-hover ps-1 text-12' style={{ borderLeft: '.5px solid #979797' }}>Remove</span>
                                 </div>
                             </div>
                         </div>
@@ -144,9 +159,9 @@ export default function CartTable(props) {
                                 <Row style={{ height: '100%' }}>
                                     <Col lg={8} className='text-center d-flex justify-content-center align-self-center'>
                                         <div style={{ padding: '10px', border: '2px solid #d4d3d3' }}>
-                                            <span onClick={() => handleChangeQuantity(item._id, Number(item.quantity) - 1)} className='p-2 cursor-hover cart-item-quanlity-btn'>-</span>
-                                            <input onChange={(e) => handleChangeQuantity(item._id, e.target.value)} name='quantitity' className='text-center' value={item.quantity} style={{ width: '36px', border: 'none' }} />
-                                            <span onClick={() => handleChangeQuantity(item._id, Number(item.quantity) + 1)} className='p-2 cursor-hover cart-item-quanlity-btn'>+</span>
+                                            <span onClick={() => handleChangeQuantity(idx, Number(item.quantity) - 1)} className='p-2 cursor-hover cart-item-quanlity-btn'>-</span>
+                                            <input onChange={(e) => handleChangeQuantity(idx, e.target.value)} name='quantitity' className='text-center' value={item.quantity} style={{ width: '36px', border: 'none' }} />
+                                            <span onClick={() => handleChangeQuantity(idx, Number(item.quantity) + 1)} className='p-2 cursor-hover cart-item-quanlity-btn'>+</span>
                                         </div>
                                     </Col>
                                     <Col lg={4} className='text-center d-flex justify-content-center align-self-center'>

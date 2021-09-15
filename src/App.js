@@ -35,7 +35,7 @@ function App() {
       if (cartParsed) {
         // console.log('not login --------------- ' + cartParsed.cart.length)
         for (let i = 0; i < cartParsed.cart.length; i++) {
-          // totalPriceRaw += Number(cartParsed.cart[i].productId.price) * Number(cartParsed.cart[i].quantity);
+          totalPriceRaw += Number(cartParsed.cart[i].productId.price) * Number(cartParsed.cart[i].quantity);
           totalProducts += Number(cartParsed.cart[i].quantity);
         }
         setCart({ cart: cartParsed.cart, totalPriceRaw, totalProducts });
@@ -44,11 +44,9 @@ function App() {
         setCart({ cart: [], totalPriceRaw: 0, totalProducts: 0 });
       return;
     }
-    // const timeOutId = setTimeout(() => {
     const fetchAll = async () => {
       setLoad(true);
       try {
-        // fetch all cate group by catlists
         let res = await CallAuthAPI('/user/get-cart', 'get', null);
         if (res.data.cart.length === 0) {
           let cartParsed = JSON.parse(localStorage.getItem('CART'));
@@ -57,7 +55,7 @@ function App() {
           if (cartParsed) {
             // console.log('login but cart null ---------- ' + cartParsed.cart.length)
             for (let i = 0; i < cartParsed.cart.length; i++) {
-              // totalPriceRaw += Number(cartParsed.cart[i].productId.price) * Number(cartParsed.cart[i].quantity);
+              totalPriceRaw += Number(cartParsed.cart[i].productId.price) * Number(cartParsed.cart[i].quantity);
               totalProducts += Number(cartParsed.cart[i].quantity);
             }
             setCart({ cart: cartParsed.cart, totalPriceRaw, totalProducts });
@@ -73,12 +71,8 @@ function App() {
       setLoad(false);
     }
     fetchAll();
-    // }, 500);
-    // return () => clearTimeout(timeOutId);
-
   }, [isAuthenticated, updateCart])
-  console.log(cart)
-
+  // console.log(cart)
 
   useEffect(() => {
     const fetchAll = async () => {
@@ -113,14 +107,14 @@ function App() {
             path="/product-item/:id"
             exact
             render={(props) => (
-              <ProductInfo {...props} setCart={setCart} cart={cart} setUpdateCart={setUpdateCart} />
+              <ProductInfo {...props} cart={cart} setUpdateCart={setUpdateCart} />
             )}
           />
           <Route
             path="/shopping-cart"
             exact
             render={(props) => (
-              <ShoppingCart {...props} setCart={setCart} cart={cart} setUpdateCart={setUpdateCart} />
+              <ShoppingCart {...props} cart={cart} setUpdateCart={setUpdateCart} />
             )}
           />
           <Route path='' component={PageNotFound} />

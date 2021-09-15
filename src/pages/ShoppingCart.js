@@ -12,7 +12,7 @@ export default function ShoppingCart(props) {
             <Row>
                 <h1 style={{ fontSize: '24px', marginBottom: '36px' }}>My Bag</h1>
                 <Col lg={8}>
-                    <CartTable cart={props.cart.cart} setUpdateCart={props.setUpdateCart} />
+                    <CartTable cart={props.cart} setUpdateCart={props.setUpdateCart} />
                 </Col>
                 <Col lg={4}>
                     <CartTotal totalPriceRaw={props.cart.totalPriceRaw} />
