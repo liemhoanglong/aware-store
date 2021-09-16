@@ -12,6 +12,7 @@ export default function Paginate(props) {
         alt='arrow-left'
       />
       <input
+        type='number'
         name='page'
         value={props.page}
         onChange={(e) => props.handleChangePage(e.target.value)}

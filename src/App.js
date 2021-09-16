@@ -48,7 +48,7 @@ function App() {
       setLoad(true);
       try {
         let res = await CallAuthAPI('/user/get-cart', 'get', null);
-        if (res.data.cart.length === 0) {
+        if (res.data.cart.length === 0) { //if user cart after fetch is null save cart form local storage to cart
           let cartParsed = JSON.parse(localStorage.getItem('CART'));
           let totalPriceRaw = 0;
           let totalProducts = 0;
@@ -63,8 +63,10 @@ function App() {
           else
             setCart({ cart: [], totalPriceRaw: 0, totalProducts: 0 });
         }
-        else
+        else { //if user cart after fetch is exist save cart form to local storage
           setCart(res.data);
+          localStorage.setItem('CART', JSON.stringify(res.data));
+        }
       } catch (err) {
         console.log(err)
       }

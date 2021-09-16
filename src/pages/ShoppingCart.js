@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 
 import CartTable from '../components/CartTable';
@@ -15,7 +14,7 @@ export default function ShoppingCart(props) {
                     <CartTable cart={props.cart} setUpdateCart={props.setUpdateCart} />
                 </Col>
                 <Col lg={4}>
-                    <CartTotal totalPriceRaw={props.cart.totalPriceRaw} />
+                    <CartTotal cart={props.cart.cart} totalPriceRaw={props.cart.totalPriceRaw} />
                 </Col>
             </Row>
         </Container>

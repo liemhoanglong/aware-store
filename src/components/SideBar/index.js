@@ -214,6 +214,9 @@ const SideBar = (props) => {
           </div>
         </div>
       </div>
+      <div className='my-5' />
+      <br />
+      <div className='my-5' />
     </div >
   )
 }

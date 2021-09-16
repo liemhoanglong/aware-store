@@ -105,13 +105,13 @@ export default function Header(props) {
                                     }
                                     <div className="dropdown-content-right">
                                         <div className='dropdown-content-group-right'>
-                                            {props.cart && props.cart.cart.map(item => (
-                                                <Link to={`/product-info/${item.productId._id}`} key={item.productId._id} className='d-flex dropdown-item-right link-custom'>
+                                            {props.cart && props.cart.cart.map((item, idx) => (
+                                                <Link to={`/product-info/${item.productId._id}`} key={idx} title={item.productId.name} className='d-flex dropdown-item-right link-custom'>
                                                     <img className='img-cover' width='60px' height='60px' src={item.productId.imageList[0]} alt={item.productId.name} />
                                                     <div style={{ width: '200px', padding: '5px 5px 5px 20px' }} className='d-flex flex-column justify-content-between'>
                                                         <span className='dropdown-cart-item-name'>{item.productId.name}</span>
                                                         <div className='d-flex justify-content-between'>
-                                                            <span className='dropdown-cart-item-name text-regular'>${item.productId.price}</span>
+                                                            <span className='dropdown-cart-item-name text-regular' style={{ width: '45px' }}>${item.productId.price}</span>
                                                             <span className='dropdown-cart-item-name text-regular'>{item.size} - {item.color.name} - {item.quantity}psc</span>
                                                         </div>
                                                     </div>
@@ -134,7 +134,7 @@ export default function Header(props) {
             <Container>
                 <div className='nav-header d-flex justify-content-center position-relative'>
                     <div className='nav-header-dropdown'>
-                        <span style={{ fontWeight: '500' }}>Mens</span>
+                        <Link className='link-custom' to='/product-list?catelist=6136342577e31326701a18fd' style={{ fontWeight: '500' }}>Mens</Link>
                         <img src={arrowDown} alt='arrow' />
                         <div className="nav-header-dropdown-contents">
                             {catelists.length > 0 && catelists[0].map((item, idx) => (
@@ -143,7 +143,7 @@ export default function Header(props) {
                         </div>
                     </div>
                     <div className='nav-header-dropdown'>
-                        <span style={{ fontWeight: '500' }}>Ladies</span>
+                        <Link className='link-custom' to='/product-list?catelist=6136343677e31326701a1901' style={{ fontWeight: '500' }}>Ladies</Link>
                         <img src={arrowDown} alt='arrow' />
                         <div className="nav-header-dropdown-contents">
                             {catelists.length > 0 && catelists[1].map((item, idx) => (
@@ -152,7 +152,7 @@ export default function Header(props) {
                         </div>
                     </div>
                     <div className='nav-header-dropdown'>
-                        <span style={{ fontWeight: '500' }}>Girls</span>
+                        <Link className='link-custom' to='/product-list?catelist=6136343b77e31326701a1903' style={{ fontWeight: '500' }}>Girls</Link>
                         <img src={arrowDown} alt='arrow' />
                         <div className="nav-header-dropdown-contents">
                             {catelists.length > 0 && catelists[2].map((item, idx) => (
@@ -161,7 +161,7 @@ export default function Header(props) {
                         </div>
                     </div>
                     <div className='nav-header-dropdown'>
-                        <span style={{ fontWeight: '500' }}>Boys</span>
+                        <Link className='link-custom' to='/product-list?catelist=6136346c9f814a47407fae2b' style={{ fontWeight: '500' }}>Boys</Link>
                         <img src={arrowDown} alt='arrow' />
                         <div className="nav-header-dropdown-contents">
                             {catelists.length > 0 && catelists[3].map((item, idx) => (

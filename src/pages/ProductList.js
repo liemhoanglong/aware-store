@@ -132,6 +132,7 @@ export default function ProductList(props) {
     const handleChangePage = (page) => {
         // console.log('onclick ' + page)
         if (page < 1) page = 1;
+        if (page === Number(filter.page)) return;
         if (page > Math.ceil(productData.count / LIMIT)) page = Math.ceil(productData.count / LIMIT);
         setFilter(prevState => ({
             ...prevState,
@@ -193,7 +194,7 @@ export default function ProductList(props) {
                         <div className="custom-dropdown ms-4">
                             <button className="dropbtn">
                                 Sort By: &nbsp; <b>{filter.sort === '1' ? 'Name: A - Z' : filter.sort === '2' ? 'Price: lowest to highest' : filter.sort === '3' ? 'Price: highest to lowest' : 'Popularity'}</b>
-                                <img src={arrowDown} className='dropbtn-arrow-down ms-3' />
+                                <img src={arrowDown} className='dropbtn-arrow-down ms-3' alt='arrow-down' />
                             </button>
                             <div className="dropdown-content">
                                 <div onClick={() => handleClickSort('0')} className="dropdown-item">Popularity</div>

@@ -1,52 +1,102 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { Container, Row, Col, Button } from 'react-bootstrap';
+import { Container, Row, Col, Button, Alert } from 'react-bootstrap';
 
 import StarIcon from '../components/Icon/StartIcon';
 import Progress from '../components/Progress';
 import CallAPI from '../services/CallAPI';
+import CallAuthAPI from '../services/CallAuthAPI';
+import { useUserState } from "../contexts/UserContext";
 
 export default function ProductInfo(props) {
-  const [product, setProduct] = useState()
-  const [productByBrand, setProductByBrand] = useState()
-  const [productByCate, setProductByCate] = useState()
-  // const [productByCate2, setProductByCate2] = useState()
-  const [load, setLoad] = useState(false)
+  const { isAuthenticated } = useUserState();
+  const [product, setProduct] = useState();
+  const [productByBrand, setProductByBrand] = useState();
+  const [productByCate, setProductByCate] = useState();
+  // const [productByCate2, setProductByCate2] = useState();
+  const [load, setLoad] = useState(false);
+  const [alert, setAlert] = useState({ type: '', info: '' });
+  const [showAlert, setShowAlert] = useState(false);
+
   const [imgCurr, setImgCurr] = useState('')
-  const [filter, setFilter] = useState({ size: '', color: '', quantity: 1 })
-  const params = useParams();
+  const [filter, setFilter] = useState({ size: 'S', color: 0, quantity: 1 });
+  const productId = useParams().id;
 
   useEffect(() => {
     const fetchData = async () => {
       setLoad(true);
       try {
-        let resProductData = await CallAPI(`/product/${params.id}`, 'get', {});
+        let resProductData = await CallAPI(`/product/${productId}`, 'get', {});
+        setProduct(resProductData.data.data);
+        setLoad(false);
+        //call api relative
         let productDataByBrand = CallAPI(`/product/search?brand=${resProductData.data.data.brand._id}&limit=5`, 'get', {});
         let productDataByCate = CallAPI(`/product/search?cate=${resProductData.data.data.cate[0]}&limit=9`, 'get', {});
-        setProduct(resProductData.data.data);
         setImgCurr(resProductData.data.data.imageList[0]);
         let resProductDataByBrand = await productDataByBrand;
         let resProductDataByCate = await productDataByCate;
-
+        //filter 4 products for brand
         let filterResProductDataByBrand = resProductDataByBrand.data.data.products.filter(product => product._id !== resProductData.data.data._id)
         if (filterResProductDataByBrand.length > 4)
           filterResProductDataByBrand = filterResProductDataByBrand.splice(0, 4);
         setProductByBrand(filterResProductDataByBrand);
+        //filter 8 products for cate
         let filterResProductDataByCate = resProductDataByCate.data.data.products.filter(product => product._id !== resProductData.data.data._id)
         if (filterResProductDataByCate.length > 8)
           filterResProductDataByCate = filterResProductDataByCate.splice(0, 8);
         setProductByCate(filterResProductDataByCate);
-        // setProductByCate2(filterResProductDataByCateClone.slice(4, 8));
       } catch (err) {
         console.log(err)
         setLoad(false);
       }
-      setLoad(false);
     }
     fetchData();
-  }, [])
+  }, [productId])
 
-  console.log(filter);
+  // console.log(filter);
+  const handleAddProductToCart = async () => {
+    setShowAlert(false);
+    setLoad(true);
+    let cartTemp = JSON.parse(JSON.stringify(props.cart.cart));//clone cart
+    for (let i = 0; i < cartTemp.length; i++) {//check already in your cart
+      if (cartTemp[i].productId._id === productId && product.colors[filter.color]._id === cartTemp[i].color._id && filter.size === cartTemp[i].size) {
+        setLoad(false);
+        setShowAlert(true);
+        setAlert({ type: 'danger', info: 'This product is already in your cart! ❌' })
+        return;
+      }
+    }
+    cartTemp.push({
+      productId: product,
+      size: filter.size,
+      quantity: filter.quantity,
+      color: product.colors[filter.color]
+    });
+    let totalPriceRaw = 0;
+    let totalProducts = 0;
+    for (let i = 0; i < cartTemp.length; i++) {
+      totalPriceRaw += Number(cartTemp[i].productId.price) * Number(filter.color.quantity);
+      totalProducts += Number(filter.color.quantity);
+    }
+    localStorage.setItem('CART', JSON.stringify({ cart: cartTemp, totalPriceRaw, totalProducts }));
+
+    if (isAuthenticated) {//CallAuthAPI
+      try {
+        let res = await CallAuthAPI('/user/update-cart', 'put', { cart: cartTemp });
+        // console.log(res.data);
+      }
+      catch (err) {
+        console.log(err);
+        setLoad(false);
+        setShowAlert(true)
+        setAlert({ type: 'danger', info: 'Can not add to cart! ❌' })
+      }
+    }
+    setShowAlert(true)
+    setAlert({ type: 'success', info: 'Add to cart successfully ✔️' })
+    props.setUpdateCart(prevState => (!prevState))//update cart
+    setLoad(false);
+  }
 
   return (
     <Container>
@@ -98,15 +148,23 @@ export default function ProductInfo(props) {
                 <div className='d-flex align-self-center'>
                   <p className='mt-4 text-14'>Quantity</p>
                   <div style={{ margin: '15px 0 5px 21px', padding: '5px 10px', border: '2px solid #d4d3d3' }}>
-                    <span onClick={() => setFilter(prevState => ({ ...prevState, quantity: prevState.quantity != 1 && --prevState.quantity }))} className='p-2 cursor-hover cart-item-quanlity-btn'>-</span>
-                    <input onChange={(e) => setFilter(prevState => ({ ...prevState, quantity: !isNaN(e.target.value) && e.target.value > 0 && e.target.value }))} name='quantitity' value={filter.quantity} className='text-center' style={{ width: '36px', border: 'none' }} />
-                    <span onClick={() => setFilter(prevState => ({ ...prevState, quantity: ++prevState.quantity }))} className='p-2 cursor-hover cart-item-quanlity-btn'>+</span>
+                    <span onClick={() => setFilter(prevState => ({ ...prevState, quantity: prevState.quantity > 1 ? prevState.quantity - 1 : 1 }))} className='p-2 cursor-hover cart-item-quanlity-btn'>-</span>
+                    <input type='number' onChange={(e) => setFilter(prevState => ({ ...prevState, quantity: (!isNaN(e.target.value) && e.target.value > 1) ? e.target.value : 1 }))} name='quantitity' value={filter.quantity} className='text-center' style={{ width: '36px', border: 'none' }} />
+                    <span onClick={() => setFilter(prevState => ({ ...prevState, quantity: prevState.quantity + 1 }))} className='p-2 cursor-hover cart-item-quanlity-btn'>+</span>
                   </div>
                 </div>
-                <Button className='product-info-bnt-add-to-cart'>Add to cart</Button>
+                <Button onClick={handleAddProductToCart} className='product-info-bnt-add-to-cart'>Add to cart</Button>
+                {showAlert ?
+                  <Alert variant={alert.type} onClose={() => setShowAlert(false)} dismissible>
+                    <p>
+                      {alert.info}
+                    </p>
+                  </Alert>
+                  : null
+                }
                 <hr className='mt-0' />
                 <div className='mt-2 text-12' >
-                  <div dangerouslySetInnerHTML={{ __html: product ? product.size[0].info : '' }} />
+                  <div dangerouslySetInnerHTML={{ __html: product ? product.size[filter.size === 'S' ? 0 : filter.size === 'M' ? 1 : 2].info : '' }} />
                 </div>
               </div>
             </Col>
@@ -117,7 +175,7 @@ export default function ProductInfo(props) {
           <p className='m-0'>More From</p>
           <p className='text-regular'>{product && product.brand.name}</p>
           {productByBrand && productByBrand.map((product) => (
-            <Link to={'product/' + product._id} title={product.name}>
+            <Link key={product._id} to={'product/' + product._id} title={product.name}>
               <img src={product.imageList[0]} alt={product.name} className='img-cover' />
             </Link>
           ))}
@@ -149,7 +207,7 @@ export default function ProductInfo(props) {
         <Col lg={6}>
           <Row>
             {productByCate && productByCate.length > 0 && productByCate.slice(0, 4).map(product => (
-              <Col lg={3}>
+              <Col lg={3} key={product._id}>
                 <Link to={'/product-info/' + product._id} className='link-custom'>
                   <img className='img-cover' src={product.imageList[0]} alt={product.name} width='100%' height='195px' />
                   <span className='text-regular text-14'>{product.name}</span>
@@ -161,7 +219,7 @@ export default function ProductInfo(props) {
         <Col lg={6}>
           <Row>
             {productByCate && productByCate.length > 4 && productByCate.slice(4, 8).map(product => (
-              <Col lg={3}>
+              <Col lg={3} key={product._id}>
                 <Link to={'/product-info/' + product._id} className='link-custom'>
                   <img className='img-cover' src={product.imageList[0]} alt={product.name} width='100%' height='195px' />
                   <span className='text-regular text-14'>{product.name}</span>

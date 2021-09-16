@@ -160,7 +160,7 @@ export default function CartTable(props) {
                                     <Col lg={8} className='text-center d-flex justify-content-center align-self-center'>
                                         <div style={{ padding: '10px', border: '2px solid #d4d3d3' }}>
                                             <span onClick={() => handleChangeQuantity(idx, Number(item.quantity) - 1)} className='p-2 cursor-hover cart-item-quanlity-btn'>-</span>
-                                            <input onChange={(e) => handleChangeQuantity(idx, e.target.value)} name='quantitity' className='text-center' value={item.quantity} style={{ width: '36px', border: 'none' }} />
+                                            <input onChange={(e) => handleChangeQuantity(idx, e.target.value)} name='quantitity' className='text-center' value={item.quantity} style={{ width: '36px', border: 'none' }} type='number' />
                                             <span onClick={() => handleChangeQuantity(idx, Number(item.quantity) + 1)} className='p-2 cursor-hover cart-item-quanlity-btn'>+</span>
                                         </div>
                                     </Col>

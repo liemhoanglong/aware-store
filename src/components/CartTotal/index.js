@@ -1,15 +1,20 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 
-// import './footer.css';
+import CallAuthAPI from '../../services/CallAuthAPI';
+import { useUserState } from "../../contexts/UserContext";
+import Progress from '../Progress';
 
 export default function CartTotal(props) {
+    const [load, setLoad] = useState(false);
+    const handleCheckOut = () => {
 
+    }
     return (
         <div>
+            <Progress isLoad={load} />
             <div className='text-14'><b>Total</b></div>
-            <div className='cart-total'>
+            <div className='cart-total mt-2'>
                 <div className='d-flex justify-content-between'>
                     <span>Shipping & Handling:</span>
                     <span>Free</span>
@@ -24,7 +29,7 @@ export default function CartTotal(props) {
                     <b><span>${props.totalPriceRaw}</span></b>
                 </div>
             </div>
-            <Button className='cart-btn-checkout'>Check out </Button>
+            <Button onclick={handleCheckOut} className='cart-btn-checkout'>Check out</Button>
         </div>
     )
 }
