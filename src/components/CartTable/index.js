@@ -126,7 +126,7 @@ export default function CartTable(props) {
                 </Col>
             </Row>
             {props.cart.cart.length > 0 && props.cart.cart.map((item, idx) => (
-                <Row key={item._id} >
+                <Row key={idx}>
                     <Col lg={12}>
                         <hr className='my-2' />
                     </Col>
@@ -164,7 +164,7 @@ export default function CartTable(props) {
                                             <span onClick={() => handleChangeQuantity(idx, Number(item.quantity) + 1)} className='p-2 cursor-hover cart-item-quanlity-btn'>+</span>
                                         </div>
                                     </Col>
-                                    <Col lg={4} className='text-center d-flex justify-content-center align-self-center'>
+                                    <Col lg={4} className='text-center d-flex justify-content-end align-self-center'>
                                         <div className='text-end'>${item.productId.price}</div>
                                     </Col>
                                 </Row>

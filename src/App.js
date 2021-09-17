@@ -13,6 +13,9 @@ import ProductList from "./pages/ProductList";
 import ProductInfo from "./pages/ProductInfo";
 import ShoppingCart from "./pages/ShoppingCart";
 import PageNotFound from "./pages/PageNotFound";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
+import ForgotPass from "./components/ForgotPass";
 import { useUserState } from "./contexts/UserContext";
 
 function App() {
@@ -26,33 +29,49 @@ function App() {
   const [cart, setCart] = useState({ cart: [], totalPriceRaw: 0, totalProducts: 0 });
   const [updateCart, setUpdateCart] = useState(false);
 
+  const [loginShow, setLoginShow] = useState(false);
+  const [signupShow, setSignupShow] = useState(false);
+  const [forgotPassShow, setForgotPassShow] = useState(false);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      let cartParsed = JSON.parse(localStorage.getItem('CART'));
-      let totalPriceRaw = 0;
-      let totalProducts = 0;
-      if (cartParsed) {
-        // console.log('not login --------------- ' + cartParsed.cart.length)
-        for (let i = 0; i < cartParsed.cart.length; i++) {
-          totalPriceRaw += Number(cartParsed.cart[i].productId.price) * Number(cartParsed.cart[i].quantity);
-          totalProducts += Number(cartParsed.cart[i].quantity);
-        }
-        setCart({ cart: cartParsed.cart, totalPriceRaw, totalProducts });
-      }
-      else
-        setCart({ cart: [], totalPriceRaw: 0, totalProducts: 0 });
-      return;
-    }
     const fetchAll = async () => {
-      setLoad(true);
+      if (!isAuthenticated) {
+        let cartParsed = JSON.parse(localStorage.getItem('CART'));
+        let totalPriceRaw = 0;
+        let totalProducts = 0;
+        console.log('App-----------------')
+        console.log(cartParsed)
+        if (cartParsed) {
+          // console.log('not login --------------- ' + cartParsed.cart.length)
+          for (let i = 0; i < cartParsed.cart.length; i++) {
+            totalPriceRaw += Number(cartParsed.cart[i].productId.price) * Number(cartParsed.cart[i].quantity);
+            totalProducts += Number(cartParsed.cart[i].quantity);
+          }
+          setCart({ cart: cartParsed.cart, totalPriceRaw, totalProducts });
+        }
+        else
+          setCart({ cart: [], totalPriceRaw: 0, totalProducts: 0 });
+        return;
+      }
       try {
         let res = await CallAuthAPI('/user/get-cart', 'get', null);
-        if (res.data.cart.length === 0) { //if user cart after fetch is null save cart form local storage to cart
+        if (!res.data.cart) {
+          setCart({ cart: [], totalPriceRaw: 0, totalProducts: 0 });
+        }
+        else if (res.data.cart.length === 0) {
+          //if user cart after fetch is null save cart form local storage to cart
+          //then update cart in database
           let cartParsed = JSON.parse(localStorage.getItem('CART'));
           let totalPriceRaw = 0;
           let totalProducts = 0;
           if (cartParsed) {
+            try {
+              let res = await CallAuthAPI('/user/update-cart', 'put', { cart: cartParsed.cart });
+              // console.log(res.data);
+            }
+            catch (err) {
+              console.log(err);
+            }
             // console.log('login but cart null ---------- ' + cartParsed.cart.length)
             for (let i = 0; i < cartParsed.cart.length; i++) {
               totalPriceRaw += Number(cartParsed.cart[i].productId.price) * Number(cartParsed.cart[i].quantity);
@@ -70,7 +89,6 @@ function App() {
       } catch (err) {
         console.log(err)
       }
-      setLoad(false);
     }
     fetchAll();
   }, [isAuthenticated, updateCart])
@@ -99,8 +117,24 @@ function App() {
       <Router>
         {/* component load */}
         <Progress isLoad={load} />
-
-        <Header catelists={catelists} cart={cart} />
+        <Login
+          show={loginShow}
+          onHide={() => setLoginShow(false)}
+          setSignupShow={() => setSignupShow(true)}
+          setLoginShow={() => setLoginShow(true)}
+          setForgotPassShow={() => setForgotPassShow(true)}
+        />
+        <Signup
+          show={signupShow}
+          onHide={() => setSignupShow(false)}
+          setLoginShow={() => setLoginShow(true)}
+        />
+        <ForgotPass
+          show={forgotPassShow}
+          onHide={() => setForgotPassShow(false)}
+          setLoginShow={() => setLoginShow(true)}
+        />
+        <Header catelists={catelists} cart={cart} setSignupShow={setSignupShow} setLoginShow={setLoginShow} />
         <Switch>
           <Route path='/' exact component={Home} />
           <Route path='/profile/:state' exact component={Profile} />
@@ -116,7 +150,7 @@ function App() {
             path="/shopping-cart"
             exact
             render={(props) => (
-              <ShoppingCart {...props} cart={cart} setUpdateCart={setUpdateCart} />
+              <ShoppingCart {...props} cart={cart} setUpdateCart={setUpdateCart} setLoginShow={setLoginShow} />
             )}
           />
           <Route path='' component={PageNotFound} />

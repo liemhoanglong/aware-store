@@ -5,7 +5,8 @@ import CartTable from '../components/CartTable';
 import CartTotal from '../components/CartTotal';
 
 export default function ShoppingCart(props) {
-    // console.log(props.cart)
+    // console.log('shopping cart------------')
+
     return (
         <Container>
             <Row>
@@ -14,7 +15,8 @@ export default function ShoppingCart(props) {
                     <CartTable cart={props.cart} setUpdateCart={props.setUpdateCart} />
                 </Col>
                 <Col lg={4}>
-                    <CartTotal cart={props.cart.cart} totalPriceRaw={props.cart.totalPriceRaw} />
+                    <CartTotal cart={props.cart} setUpdateCart={props.setUpdateCart} setLoginShow={props.setLoginShow} />
+                    {/* <button onClick={() => props.setLoginShow(true)} variant="danger" className='cart-btn-checkout'>Check out</button> */}
                 </Col>
             </Row>
         </Container>
