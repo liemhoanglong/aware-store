@@ -88,7 +88,7 @@ export default function Header(props) {
                             <span className='dropdown-cart-item-name'>{item.productId.name}</span>
                             <div className='d-flex justify-content-between'>
                               <span className='dropdown-cart-item-name text-regular' style={{ width: '45px' }}>${item.productId.price}</span>
-                              <span className='dropdown-cart-item-name text-regular'>{item.size} - {item.color.name} - {item.quantity}psc</span>
+                              <span className='dropdown-cart-item-name text-regular'>{item.size} - {item.color.name} - {item.quantity}pcs</span>
                             </div>
                           </div>
                         </Link>

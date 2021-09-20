@@ -6,6 +6,31 @@ import threeDot from '../../images/threedots.svg';
 
 export default function OrderCard(props) {
 
+  const handleWriteReview = (data, idx) => {
+    props.setWriteReviewShow(true);
+    props.setReviewData(prevState => ({
+      ...prevState,
+      productId: data.productId._id,
+      orderId: props.order._id,
+      color: data.color._id,
+      size: data.size,
+      index: idx
+    }));
+  }
+
+  const handleEditReview = (data, idx) => {
+    props.setReviewData(prevState => ({
+      ...prevState,
+      productId: data.productId._id,
+      orderId: props.order._id,
+      color: data.color._id,
+      size: data.size,
+      index: idx
+    }));
+    props.setCallMyReview(prevState => (!prevState));
+    props.setEditReviewShow(true);
+  }
+
   return (
     <div className='jumbotron'>
       <div className='d-flex justify-content-between'>
@@ -18,16 +43,20 @@ export default function OrderCard(props) {
             <Badge bg="secondary">Pending</Badge> :
             props.order.status === 1 ?
               <Badge bg="success">Completed</Badge> :
-              <Badge bg="warning" text="dark">Cancel</Badge>
+              props.order.status === 2 ?
+                <Badge bg="primary">Delivering</Badge> :
+                <Badge bg="warning" text="dark">Canceled</Badge>
           }
-          <div className="custom-dropdown cursor-hover">
-            <img style={{ marginBottom: '2px' }} src={threeDot} alt='more action' />
-            <div className="dropdown-content-right">
-              <div className="dropdown-content-group-right">
-                <span onClick={props.handleAcceptCancelOrder} className="link-custom dropdown-item-right">Cancel order</span>
+          {props.order.status === 0 &&
+            <div className="custom-dropdown cursor-hover">
+              <img style={{ marginBottom: '2px' }} src={threeDot} alt='more action' />
+              <div className="dropdown-content-right">
+                <div className="dropdown-content-group-right">
+                  <span onClick={props.handleAcceptCancelOrder} className="link-custom dropdown-item-right">Cancel order</span>
+                </div>
               </div>
             </div>
-          </div>
+          }
         </div>
       </div>
       <hr />
@@ -46,7 +75,10 @@ export default function OrderCard(props) {
               <p className='m-0'>QTY: {item.quantity}</p>
             </div>
           </div>
-          <Link to={'product-info/' + item.productId._id} className='text-right'>Write review</Link>
+          {!item.isReview ?
+            <span onClick={() => handleWriteReview(item, idx)} className='cursor-hover text-right text-primary'>Write review</span>
+            : <span onClick={() => handleEditReview(item, idx)} className='cursor-hover text-right text-success'>Edit review</span>
+          }
         </div>
       ))}
       <hr className=' mt-0' />

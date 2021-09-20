@@ -6,13 +6,20 @@ import Progress from '../components/Progress';
 import CallAuthAPI from '../services/CallAuthAPI';
 import OrderCard from '../components/OrderCard';
 import Accept from '../components/Accept';
+import Review from '../components/Review';
 import Paginate from '../components/Paginate';
 import goShoppingNow from '../images/go-shopping-now.png';
 
 export default function MyOrders(props) {
   const [ordersData, setOrdersData] = useState(null);
   const [load, setLoad] = useState(false);
+  const [myOrderReset, setMyOrderReset] = useState(false);
+  const [callMyReview, setCallMyReview] = useState(null);
   const [acceptShow, setAcceptShow] = useState(false);
+  const [writeReviewShow, setWriteReviewShow] = useState(false);
+  const [editReviewShow, setEditReviewShow] = useState(false);
+  const [reviewId, setReviewId] = useState('');
+  const [reviewData, setReviewData] = useState({ productId: '', orderId: '', color: '', size: '', title: '', content: '', star: 5, index: -1 });
   const [orderIndex, setOrderIndex] = useState(-1);
   const [orderId, setOrderId] = useState(-1);
   const [page, setPage] = useState(1);
@@ -28,8 +35,8 @@ export default function MyOrders(props) {
     setAcceptShow(false);
     if (orderIndex < 0 || orderId < 0) return;
     let orderDataTemp = JSON.parse(JSON.stringify(ordersData.orders))
-    console.log(orderIndex)
-    console.log(orderId)
+    // console.log(orderIndex)
+    // console.log(orderId)
     try {
       await CallAuthAPI(`/order/cancel/${orderId}`, 'get', null)
     } catch (err) {
@@ -53,7 +60,25 @@ export default function MyOrders(props) {
       setLoad(false);
     };
     fetchAll();
-  }, [page])
+  }, [page, myOrderReset])
+
+  useEffect(() => {
+    if (callMyReview === null) return;
+    const fetchAll = async () => {
+      setLoad(true);
+      try {
+        let res = await CallAuthAPI(`/comment/order?orderId=${reviewData.orderId}&productId=${reviewData.productId}&color=${reviewData.color}&size=${reviewData.size}`, 'get', null);
+        const { content, star, title } = res.data
+        setReviewData({ ...reviewData, content, star, title });
+        setReviewId(res.data._id);
+        setLoad(false);
+      } catch (err) {
+        console.log(err)
+        setLoad(false);
+      }
+    };
+    fetchAll();
+  }, [callMyReview])
 
   const handleChangePage = (page) => {
     // console.log('onclick ' + page)
@@ -89,6 +114,23 @@ export default function MyOrders(props) {
         onAccepted={() => handleCancelOrder()}
         title='Do you really want to cancel this order?'
       />
+      <Review
+        show={writeReviewShow}
+        onHide={() => setWriteReviewShow(false)}
+        reviewData={reviewData}
+        setReviewData={setReviewData}
+        setMyOrderReset={setMyOrderReset}
+        type={1}
+      />
+      <Review
+        show={editReviewShow}
+        onHide={() => setEditReviewShow(false)}
+        reviewData={reviewData}
+        setReviewData={setReviewData}
+        setMyOrderReset={setMyOrderReset}
+        type={2}
+        reviewId={reviewId}
+      />
       <Progress isLoad={load} />
       <h1 style={{ fontSize: '24px', marginBottom: '36px' }}>My orders</h1>
       {ordersData && <div className='d-flex justify-content-end'>
@@ -105,7 +147,14 @@ export default function MyOrders(props) {
       <br />
       {ordersData ? ordersData.orders.map((order, idx) => (
         <div key={order._id}>
-          <OrderCard order={order} handleAcceptCancelOrder={() => handleAcceptCancelOrder(order._id, idx)} />
+          <OrderCard
+            setReviewData={setReviewData}
+            setEditReviewShow={setEditReviewShow}
+            setWriteReviewShow={setWriteReviewShow}
+            order={order}
+            handleAcceptCancelOrder={() => handleAcceptCancelOrder(order._id, idx)}
+            setCallMyReview={setCallMyReview}
+          />
           <hr />
         </div>
       ))
