@@ -24,18 +24,21 @@ export default function MyOrders(props) {
   }
 
   const handleCancelOrder = async () => {
+    setLoad(true);
     setAcceptShow(false);
     if (orderIndex < 0 || orderId < 0) return;
-    let orderDataTemp = JSON.parse(JSON.stringify(ordersData))
+    let orderDataTemp = JSON.parse(JSON.stringify(ordersData.orders))
     console.log(orderIndex)
     console.log(orderId)
     try {
       await CallAuthAPI(`/order/cancel/${orderId}`, 'get', null)
     } catch (err) {
       console.log(err)
+      setLoad(false);
     }
+    setLoad(false);
     orderDataTemp[orderIndex].status = -1;
-    setOrdersData(orderDataTemp);
+    setOrdersData({ ...ordersData, orders: orderDataTemp });
   }
 
   useEffect(() => {
