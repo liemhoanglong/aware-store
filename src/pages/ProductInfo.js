@@ -4,6 +4,8 @@ import { Container, Row, Col, Button, Alert } from 'react-bootstrap';
 
 import StarIcon from '../components/Icon/StartIcon';
 import Progress from '../components/Progress';
+import Paginate from '../components/Paginate';
+import Comment from '../components/Comment';
 import CallAPI from '../services/CallAPI';
 import CallAuthAPI from '../services/CallAuthAPI';
 import { useUserState } from "../contexts/UserContext";
@@ -22,13 +24,23 @@ export default function ProductInfo(props) {
   const [filter, setFilter] = useState({ size: 'S', color: 0, quantity: 1 });
   const productId = useParams().id;
 
+  const [page, setPage] = useState(1);
+  const [commentData, setCommentData] = useState();
+  const [rate, setRate] = useState(0);
+
   useEffect(() => {
     const fetchData = async () => {
       setLoad(true);
       try {
+        // let resCommentData = CallAPI(`/comment/product/${productId}`, 'get', {});
+        let resRateData = CallAPI(`/comment/rate/${productId}`, 'get', {});
         let resProductData = await CallAPI(`/product/${productId}`, 'get', {});
         setProduct(resProductData.data.data);
         setLoad(false);
+        // let resultCommentData = await resCommentData;
+        let resultRateData = await resRateData;
+        // setCommentData(resultCommentData.data);
+        setRate(resultRateData.data ? resultRateData.data : 0);
         //call api relative
         let productDataByBrand = CallAPI(`/product/search?brand=${resProductData.data.data.brand._id}&limit=5`, 'get', {});
         let productDataByCate = CallAPI(`/product/search?cate=${resProductData.data.data.cate[0]}&limit=9`, 'get', {});
@@ -52,6 +64,22 @@ export default function ProductInfo(props) {
     }
     fetchData();
   }, [productId])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoad(true);
+      try {
+        let resCommentData = CallAPI(`/comment/product/${productId}?page=${page}`, 'get', {});
+        let resultCommentData = await resCommentData;
+        setCommentData(resultCommentData.data);
+        setLoad(false);
+      } catch (err) {
+        console.log(err)
+        setLoad(false);
+      }
+    }
+    fetchData();
+  }, [productId, page]);
 
   // console.log(filter);
   const handleAddProductToCart = async () => {
@@ -98,10 +126,37 @@ export default function ProductInfo(props) {
     setLoad(false);
   }
 
+  const handleChangePage = (page) => {
+    // console.log('onclick ' + page)
+    if (page < 1) page = 1;
+    if (page === Number(page)) return;
+    if (page > Math.ceil(commentData.count / 4)) page = Math.ceil(commentData.count / 4);
+    setPage(page);
+  }
+
+  const handleClickPrePage = () => {
+    let pagePrev = page;
+    // console.log('onclick Pre Page ' + page)
+    if (pagePrev - 1 < 1) return;
+    --pagePrev;
+    setPage(pagePrev);
+    // handleChangePage(pagePrev);
+  }
+
+  const handleClickNextPage = () => {
+    let pageNext = page;
+    // console.log('onclick Next Page ' + page)
+    if (pageNext + 1 > Math.ceil(commentData.count / 4)) return;
+    ++pageNext;
+    setPage(pageNext);
+    // handleChangePage(pageNext);
+  }
+
+
   return (
     <Container>
       <Progress isLoad={load} />
-      <center>Product Info</center>
+      <center className='my-4 text-regular'><p>{product && product.catelist[0].name + '/' + product.categroup[0].name + '/' + product.name}</p></center>
       <Row>
         <Col lg={1}>
           <div className='product-info-thumbnail-wrapper'>
@@ -121,13 +176,13 @@ export default function ProductInfo(props) {
               <div>
                 <h1 className='product-info-detail-title m-0'>{product && product.name}</h1>
                 <p className='product-info-detail-price mb-2'>${product && product.price}</p>
-                <div className='d-flex align-items-center'>
-                  <StarIcon color='#FFD543' className='me-1' />
-                  <StarIcon color='#FFD543' className='me-1' />
-                  <StarIcon color='#FFD543' className='me-1' />
-                  <StarIcon color='#D4D3D3' className='me-1' />
-                  <StarIcon color='#D4D3D3' className='me-3' />
-                  <span className='text-regular text-14 ps-2' style={{ borderLeft: '1px solid #D4D3D3' }}>0 review</span>
+                <div className='d-flex'>
+                  <StarIcon color={`${rate > 0 ? '#FFD543' : '#D4D3D3'}`} className='me-1' />
+                  <StarIcon color={`${rate > 1 ? '#FFD543' : '#D4D3D3'}`} className='me-1' />
+                  <StarIcon color={`${rate > 2 ? '#FFD543' : '#D4D3D3'}`} className='me-1' />
+                  <StarIcon color={`${rate > 3 ? '#FFD543' : '#D4D3D3'}`} className='me-1' />
+                  <StarIcon color={`${rate > 4 ? '#FFD543' : '#D4D3D3'}`} className='me-3' />
+                  <span className='text-regular text-14 ps-2' style={{ borderLeft: '1px solid #D4D3D3', marginTop: '-2px' }}>{commentData && commentData.count ? commentData.count : 0} review</span>
                 </div>
                 <div >
                   <p className='mt-4 text-14'>Size</p>
@@ -193,7 +248,32 @@ export default function ProductInfo(props) {
       <Row >
         <Col lg={1}></Col>
         <Col lg={10}>
-          <center><p className='text-14 text-regular product-info-no-review'>No reviews</p></center>
+          {commentData && commentData.count > 0 ?
+            <>
+              <div className='d-flex justify-content-end mb-2'>
+                <Paginate
+                  handleClickPrePage={handleClickPrePage}
+                  handleClickNextPage={handleClickNextPage}
+                  page={page}
+                  handleChangePage={handleChangePage}
+                  data={commentData}
+                  limit={4}
+                />
+              </div>
+              <Comment commentData={commentData} />
+              <div className='d-flex justify-content-end'>
+                <Paginate
+                  handleClickPrePage={handleClickPrePage}
+                  handleClickNextPage={handleClickNextPage}
+                  page={page}
+                  handleChangePage={handleChangePage}
+                  data={commentData}
+                  limit={4}
+                />
+              </div>
+            </>
+            : <center><p className='text-14 text-regular product-info-no-review'>No reviews</p></center>
+          }
         </Col>
         <Col lg={1}></Col>
       </Row >
@@ -208,9 +288,9 @@ export default function ProductInfo(props) {
           <Row>
             {productByCate && productByCate.length > 0 && productByCate.slice(0, 4).map(product => (
               <Col lg={3} key={product._id}>
-                <Link to={'/product-info/' + product._id} className='link-custom'>
+                <Link to={'/product-info/' + product._id} className='link-custom' title={product.name}>
                   <img className='img-cover' src={product.imageList[0]} alt={product.name} width='100%' height='195px' />
-                  <span className='text-regular text-14'>{product.name}</span>
+                  <span className='text-regular text-14 product-card-name-text' >{product.name}</span>
                 </Link>
               </Col>
             ))}

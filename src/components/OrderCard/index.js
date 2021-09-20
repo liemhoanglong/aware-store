@@ -40,11 +40,11 @@ export default function OrderCard(props) {
         </div>
         <div>
           {props.order.status === 0 ?
-            <Badge bg="secondary">Pending</Badge> :
+            <Badge bg="secondary">Pending...</Badge> :
             props.order.status === 1 ?
               <Badge bg="success">Completed</Badge> :
               props.order.status === 2 ?
-                <Badge bg="primary">Delivering</Badge> :
+                <Badge bg="primary">Delivering...</Badge> :
                 <Badge bg="warning" text="dark">Canceled</Badge>
           }
           {props.order.status === 0 &&
@@ -84,7 +84,7 @@ export default function OrderCard(props) {
       <hr className=' mt-0' />
       <p className="text-end">Subtotal: {props.order.feeShipping > 0 ? props.order.totalPrice - props.order.feeShipping + '.00' : props.order.totalPrice + '.00'}</p>
       <p className="text-end">Fee Shipping: {props.order.feeShipping > 0 ? props.order.feeShipping + '.00' : 'Free'}</p>
-      <p className='m-0 text-end' style={{ color: '#f27c24' }}>Total Price: {props.order.totalPrice + '.00'}</p>
+      <div className='m-0 text-end' style={{ color: '#f27c24' }}><span style={{ borderTop: '1px solid gray', paddingTop: '8px', paddingLeft: '15px' }}>Total Price: {props.order.totalPrice + '.00'}</span></div>
     </div>
   )
 }

@@ -23,8 +23,8 @@ export default function Review(props) {
         setLoad(false);
       }
     } else {
-      console.log('edit reviewData')
-      console.log(props.reviewData)
+      // console.log('edit reviewData')
+      // console.log(props.reviewData)
       try {
         let res = await CallAuthAPI(`/comment/${props.reviewId}`, 'put', props.reviewData);
         props.setMyOrderReset(prevState => (!prevState))

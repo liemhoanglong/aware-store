@@ -73,7 +73,7 @@ export default function CartTable(props) {
     if (isAuthenticated) {//CallAuthAPI
       try {
         let res = await CallAuthAPI('/user/update-cart', 'put', { cart: cartTemp.cart });
-        console.log(res.data);
+        // console.log(res.data);
         props.setUpdateCart(prevState => (!prevState))//update cart
       }
       catch (err) {

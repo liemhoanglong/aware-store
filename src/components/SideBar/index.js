@@ -72,7 +72,7 @@ const SideBar = (props) => {
   }
 
   const handleChangeStatus = (status) => {
-    console.log('onclick  ' + status)
+    // console.log('onclick  ' + status)
     if (props.filter.status === status) {
       props.handleChangeFilter({ status: '' })
     }
