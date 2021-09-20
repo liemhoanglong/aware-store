@@ -55,15 +55,15 @@ export default function Signup(props) {
                 </center>
                 <form onSubmit={onSubmit} style={{ padding: '27px 80px' }}>
                     <p className='mb-2'><b>NAME</b></p>
-                    <input onChange={e => setName(e.target.value)} type='text' name='name' className={`modal-input${error === '3' ? '-error' : ''} `} placeholder='Enter your name...' />
+                    <input onChange={e => setName(e.target.value)} type='text' name='name' className={`modal-input${error === '3' ? '-error' : ''} `} placeholder='Enter your name...' required />
                     <p className={`modal-text-error mt-1 ${error === '3' ? '' : 'invisible'}`}>Please enter a valid name!</p>
 
                     <p className='mb-2'><b>E-MAIL</b></p>
-                    <input onChange={e => setUsername(e.target.value)} type='email' name='email' className={`modal-input${error === '2' ? '-error' : ''} `} placeholder='Enter your e-mail...' />
+                    <input onChange={e => setUsername(e.target.value)} type='email' name='email' className={`modal-input${error === '2' ? '-error' : ''} `} placeholder='Enter your e-mail...' required />
                     <p className={`modal-text-error mt-1 ${error === '2' ? '' : 'invisible'}`}>Please enter a valid e-mail!</p>
 
                     <p className='mb-2'><b>PASSWORD</b></p>
-                    <input onChange={e => setPassword(e.target.value)} type='password' name='password' className={`modal-input${error === '1' ? '-error' : ''} `} placeholder='Enter your password...' />
+                    <input onChange={e => setPassword(e.target.value)} type='password' name='password' className={`modal-input${error === '1' ? '-error' : ''} `} placeholder='Enter your password...' required />
                     <p className={`modal-text-error mt-1 ${error === '1' ? '' : 'invisible'}`}>Your passwords must be more than 6 characters!</p>
 
                     <center className='mt-2 text-14'>

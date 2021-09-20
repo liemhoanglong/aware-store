@@ -17,8 +17,8 @@ export default function Accept(props) {
                 </center>
             </Modal.Body>
             <Modal.Footer style={{ justifyContent: 'flex-end' }}>
-                <Button onClick={props.onHide} variant="warning">Cancel</Button>
-                <Button onClick={props.onAccepted} variant="danger">Delete</Button>
+                <Button onClick={props.onHide} variant="warning">No</Button>
+                <Button onClick={props.onAccepted} variant="danger">Yes</Button>
             </Modal.Footer>
         </Modal>
     );

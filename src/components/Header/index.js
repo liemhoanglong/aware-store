@@ -7,9 +7,6 @@ import logo from '../../images/logo.svg';
 import cart from '../../images/cart.svg';
 import avatar from '../../images/avatar.jpg';
 import arrowDown from '../../images/arrow-down.svg';
-import Login from "../Login";
-import Signup from "../Signup";
-import ForgotPass from "../ForgotPass";
 import { useUserState, logoutUser, useUserDispatch } from "../../contexts/UserContext";
 
 export default function Header(props) {
@@ -18,11 +15,6 @@ export default function Header(props) {
 
   const catelists = props.catelists;
   const [search, setSearch] = useState('');
-
-  const [loginShow, setLoginShow] = useState(false);
-  const [signupShow, setSignupShow] = useState(false);
-  const [forgotPassShow, setForgotPassShow] = useState(false);
-
   const history = useHistory();
   // console.log(props.user)
   const onSearch = (e) => {
@@ -67,6 +59,7 @@ export default function Header(props) {
                     <div className="dropdown-content-right">
                       <div className='dropdown-content-group-right' style={{ marginTop: '-2px' }}>
                         <Link to='/profile/setting' className='link-custom dropdown-item-right'>Account setting</Link>
+                        <Link to='/my-orders' className='link-custom dropdown-item-right'>My orders</Link>
                         <div onClick={() => logoutUser(userDispatch, history)} className='dropdown-item-right'>Logout</div>
                       </div>
                     </div>

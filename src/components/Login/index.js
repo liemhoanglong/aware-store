@@ -18,7 +18,7 @@ export default function Login(props) {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        loginUser(userDispatch, username, password, props.history, setLoad, setError)
+        loginUser(userDispatch, username, password, props.history, setLoad, setError);
     }
 
     if (isAuthenticated) {
@@ -43,9 +43,9 @@ export default function Login(props) {
                 </center>
                 <form onSubmit={onSubmit} style={{ padding: '15px 80px 17px' }}>
                     <p className='mb-2 model-lable'><b>E-MAIL</b></p>
-                    <input onChange={e => setUsername(e.target.value)} type='email' name='email' className={`mb-4 modal-input${error ? '-error' : ''} `} placeholder='Enter your e-mail...' />
+                    <input onChange={e => setUsername(e.target.value)} type='email' name='email' className={`mb-4 modal-input${error ? '-error' : ''} `} placeholder='Enter your e-mail...' required />
                     <p className='mb-2 model-lable'><b>PASSWORD</b></p>
-                    <input onChange={e => setPassword(e.target.value)} type='password' name='password' className={`mb-4 modal-input${error ? '-error' : ''} `} placeholder='Enter your password...' />
+                    <input onChange={e => setPassword(e.target.value)} type='password' name='password' className={`mb-4 modal-input${error ? '-error' : ''} `} placeholder='Enter your password...' required />
                     <div className='d-flex justify-content-between' >
                         {/* {props.filter.brand === brand._id ? <img src={checkedBox} alt='checked-box' /> : <img src={checkBox} alt='check-box' />} */}
                         <div className='cursor-hover'><img src={checkedBox} alt='checked-box' /><span className='text-14 text-regular' >Remember password</span></div>

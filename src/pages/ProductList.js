@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useHistory } from 'react-router-dom';
+import { useLocation, useHistory } from 'react-router-dom';
 import { Container, Row, Col } from 'react-bootstrap';
 import QueryString from 'query-string';
 
@@ -156,7 +156,7 @@ export default function ProductList(props) {
     const handleClickNextPage = () => {
         let page = filter.page;
         // console.log('onclick Next Page ' + page)
-        if (page + 1 > productData.count) return;
+        if (page + 1 > Math.ceil(productData.count / LIMIT)) return;
         ++page
         setFilter(prevState => ({
             ...prevState,
