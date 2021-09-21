@@ -75,9 +75,10 @@ export default function OrderCard(props) {
               <p className='m-0'>QTY: {item.quantity}</p>
             </div>
           </div>
-          {!item.isReview ?
+          {props.order.status === 1 ? !item.isReview ?
             <span onClick={() => handleWriteReview(item, idx)} className='cursor-hover text-right text-primary'>Write review</span>
             : <span onClick={() => handleEditReview(item, idx)} className='cursor-hover text-right text-success'>Edit review</span>
+            : null
           }
         </div>
       ))}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { Row, Col, Button } from "react-bootstrap";
 
 import './CartTable.css';
@@ -7,14 +7,17 @@ import { useUserState } from "../../contexts/UserContext";
 import CallAuthAPI from '../../services/CallAuthAPI';
 import Progress from '../Progress';
 import Accept from '../Accept';
+import EditCart from '../EditCart';
 import goShoppingNow from '../../images/go-shopping-now.png';
 
 export default function CartTable(props) {
   const { isAuthenticated } = useUserState();
   const [load, setLoad] = useState(false);
   const [acceptShow, setAcceptShow] = useState(false);
+  const [editCartItemShow, setEditCartItemShow] = useState(false);
+  const [infoCartItem, setInfoCartItem] = useState({ cartIndex: -1, size: '', color: {}, quantity: 0 });
   const [productIndex, setproductIndex] = useState(-1);
-  const history = useHistory();
+  const [error, setError] = useState('');
 
   const handleChangeQuantity = async (cartIndex, qty) => {
     if (qty < 1 || isNaN(qty)) return;
@@ -83,9 +86,58 @@ export default function CartTable(props) {
     setLoad(false);
   }
 
-  const handleChangeProduct = async (itemId) => {
-    handleRemoveProduct(itemId);
-    history.push('/product-item/' + itemId);
+  const handleChangeProduct = async (cartIndex) => {
+    setEditCartItemShow(true)
+    let cartTemp = JSON.parse(JSON.stringify(props.cart)).cart;//clone cart
+    setInfoCartItem({ cartIndex: cartIndex, quantity: cartTemp[cartIndex].quantity, size: cartTemp[cartIndex].size, color: cartTemp[cartIndex].color })
+  }
+
+  const handleEditCartItem = async () => {
+    setError('');
+    let cartTemp = JSON.parse(JSON.stringify(props.cart));//clone cart
+    if (cartTemp.cart[infoCartItem.cartIndex].quantity === Number(infoCartItem.quantity) &&
+      cartTemp.cart[infoCartItem.cartIndex].size === infoCartItem.size &&
+      cartTemp.cart[infoCartItem.cartIndex].color === infoCartItem.color
+    ) return;
+    if (infoCartItem.cartIndex > -1) {
+      for (let i = 0; i < cartTemp.cart.length; i++) {
+        if (i !== infoCartItem.cartIndex) {
+          if (cartTemp.cart[i].productId._id === cartTemp.cart[infoCartItem.cartIndex].productId._id &&
+            infoCartItem.size === cartTemp.cart[i].size &&
+            infoCartItem.color._id === cartTemp.cart[i].color._id) {
+            setError('This product is exist!');
+            return;
+          }
+        }
+      }
+      cartTemp.cart[infoCartItem.cartIndex].quantity = Number(infoCartItem.quantity);
+      cartTemp.cart[infoCartItem.cartIndex].size = infoCartItem.size;
+      cartTemp.cart[infoCartItem.cartIndex].color = infoCartItem.color;
+    }
+    // console.log(cartTemp)
+    //change local storage
+    let totalPriceRaw = 0;
+    let totalProducts = 0;
+    for (let i = 0; i < cartTemp.cart.length; i++) {
+      totalPriceRaw += Number(cartTemp.cart[i].productId.price) * Number(cartTemp.cart[i].quantity);
+      totalProducts += Number(cartTemp.cart[i].quantity);
+    }
+    localStorage.setItem('CART', JSON.stringify({ cart: cartTemp.cart, totalPriceRaw, totalProducts }));
+    setEditCartItemShow(false);
+
+    if (isAuthenticated) {//CallAuthAPI
+      setLoad(true)
+      try {
+        let res = await CallAuthAPI('/user/update-cart', 'put', { cart: cartTemp.cart });
+        // console.log(res.data);
+        setLoad(false);
+      }
+      catch (err) {
+        console.log(err);
+        setLoad(false);
+      }
+    }
+    props.setUpdateCart(prevState => (!prevState))//update cart
   }
 
   return (
@@ -95,6 +147,15 @@ export default function CartTable(props) {
         onHide={() => setAcceptShow(false)}
         onAccepted={() => handleRemoveProduct(productIndex)}
         title='Do you really want to remove this product?'
+      />
+      <EditCart
+        show={editCartItemShow}
+        onHide={() => setEditCartItemShow(false)}
+        onAccepted={() => handleEditCartItem()}
+        infoCartItem={infoCartItem}
+        setInfoCartItem={setInfoCartItem}
+        cart={props.cart}
+        error={error}
       />
       <Progress isLoad={load} />
       {props.cart.cart.length > 0 ? props.cart.cart.map((item, idx) => (
@@ -134,11 +195,11 @@ export default function CartTable(props) {
             </Col>
             <Col lg={4}>
               <div className='cart-item-product-col text-14 d-flex'>
-                <Link to={`product-item/${item.productId._id}`}><img className='cart-item-product-col-img' src={item.productId.imageList[0]} alt={item.productId.name} width='80px' height='100%' /></Link>
+                <Link to={`product-info/${item.productId._id}`}><img className='cart-item-product-col-img' src={item.productId.imageList[0]} alt={item.productId.name} width='80px' height='100%' /></Link>
                 <div className='d-flex justify-content-between flex-column' style={{ marginLeft: '20px' }}>
-                  <Link to={`product-item/${item.productId._id}`} className='link-custom cart-item-product-col-name'>{item.productId.name}</Link>
+                  <Link to={`product-info/${item.productId._id}`} className='link-custom cart-item-product-col-name'>{item.productId.name}</Link>
                   <div>
-                    <span onClick={() => handleChangeProduct(item._id)} className='cursor-hover pe-1 text-12' >Change</span>
+                    <span onClick={() => handleChangeProduct(idx)} className='cursor-hover pe-1 text-12' >Change</span>
                     <span onClick={() => handleAcceptRemoveProduct(idx)} className='cursor-hover ps-1 text-12' style={{ borderLeft: '.5px solid #979797' }}>Remove</span>
                   </div>
                 </div>

@@ -16,7 +16,6 @@ export default function ShoppingCart(props) {
                 </Col>
                 <Col lg={4}>
                     <CartTotal cart={props.cart} setUpdateCart={props.setUpdateCart} setLoginShow={props.setLoginShow} />
-                    {/* <button onClick={() => props.setLoginShow(true)} variant="danger" className='cart-btn-checkout'>Check out</button> */}
                 </Col>
             </Row>
         </Container>

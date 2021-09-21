@@ -55,6 +55,7 @@ function App() {
         return;
       }
       try {
+        setLoad(true);
         let res = await CallAuthAPI('/user/get-cart', 'get', null);
         if (!res.data.cart || res.data.cart.length === 0) {
           //if user cart after fetch is null save cart form local storage to cart
@@ -67,6 +68,7 @@ function App() {
             }
             catch (err) {
               console.log(err);
+              setLoad(false);
             }
             // console.log('login but cart null ---------- ' + cartParsed.cart.length)
             let totalPriceRaw = 0;
@@ -76,16 +78,20 @@ function App() {
               totalProducts += Number(cartParsed.cart[i].quantity);
             }
             setCart({ cart: cartParsed.cart, totalPriceRaw, totalProducts });
+            setLoad(false);
           }
           else
             setCart({ cart: [], totalPriceRaw: 0, totalProducts: 0 });
+          setLoad(false);
         }
         else { //if user cart after fetch is exist save cart form to local storage
           setCart(res.data);
           localStorage.setItem('CART', JSON.stringify(res.data));
+          setLoad(false);
         }
       } catch (err) {
         console.log(err)
+        setLoad(false);
       }
     }
     fetchAll();
