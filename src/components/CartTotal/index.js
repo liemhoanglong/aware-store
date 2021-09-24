@@ -16,30 +16,33 @@ export default function CartTotal(props) {
   const [info, setInfo] = useState({ feeShipping: 0, phone: '', address: '', note: '' });
   const [checkoutShow, setCheckoutShow] = useState(false);
   const [showInfoShip, setShowInfoShip] = useState(false);
+  console.log(isAuthenticated)
 
   useEffect(() => {
     props.cart.totalPriceRaw > 1000 ? setInfo(prevState => ({ ...prevState, feeShipping: 0 })) : setInfo(prevState => ({ ...prevState, feeShipping: 20 }));
   }, [props.cart.totalPriceRaw]);
 
-  const handleCheckOut = async () => {
+  const handleCheckLogin = () => {
     if (!isAuthenticated) {
       props.setLoginShow(true)//open login
       return;
     }
-    else {//CallAuthAPI
-      setLoad(true);
-      try {
-        let res = await CallAuthAPI('/order/create', 'post', info);
-        localStorage.removeItem('CART');
-        props.setUpdateCart(prevState => (!prevState))//update cart
-        setLoad(false);
-        setCheckoutShow(false)
-        // history.push('/');
-      }
-      catch (err) {
-        console.log(err);
-        setLoad(false);
-      }
+    setCheckoutShow(true)
+  }
+
+  const handleCheckOut = async () => {
+    setLoad(true);
+    try {
+      let res = await CallAuthAPI('/order/create', 'post', info);
+      localStorage.removeItem('CART');
+      props.setUpdateCart(prevState => (!prevState))//update cart
+      setLoad(false);
+      setCheckoutShow(false)
+      // history.push('/');
+    }
+    catch (err) {
+      console.log(err);
+      setLoad(false);
     }
   }
 
@@ -84,7 +87,7 @@ export default function CartTotal(props) {
           <b><span>${props.cart.totalPriceRaw + info.feeShipping + '.00'}</span></b>
         </div>
       </div>
-      <Button onClick={() => setCheckoutShow(true)} variant="danger" className='cart-btn-checkout' disabled={props.cart.cart.length > 0 ? 0 : 1}>Check out</Button>
+      <Button onClick={handleCheckLogin} variant="danger" className='cart-btn-checkout' disabled={props.cart.cart.length > 0 ? 0 : 1}>Check out</Button>
     </div>
   )
 }
