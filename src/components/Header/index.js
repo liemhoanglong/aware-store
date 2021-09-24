@@ -3,7 +3,7 @@ import { Container, Button, Row, Col, Form, FormControl } from "react-bootstrap"
 import { Link, useHistory } from 'react-router-dom';
 
 import './header.css';
-import logo from '../../images/logo.svg';
+import logo from '../../logo.svg';
 import cart from '../../images/cart.svg';
 import avatar from '../../images/avatar.jpg';
 import arrowDown from '../../images/arrow-down.svg';

@@ -158,37 +158,39 @@ export default function CartTable(props) {
         error={error}
       />
       <Progress isLoad={load} />
+      {props.cart.cart.length > 0 &&
+        <Row >
+          <Col lg={4}>
+            <div className='text-14'><b>Product</b></div>
+          </Col>
+          <Col lg={8}>
+            <Row >
+              <Col lg={5}>
+                <Row >
+                  <Col lg={6}>
+                    <div className='text-center text-14'><b>Color</b></div>
+                  </Col>
+                  <Col lg={6}>
+                    <div className='text-center text-14'><b>Size</b></div>
+                  </Col>
+                </Row>
+              </Col>
+              <Col lg={7}>
+                <Row >
+                  <Col lg={8}>
+                    <div className='text-center text-14'><b>Quanlity</b></div>
+                  </Col>
+                  <Col lg={4}>
+                    <div className='text-end text-14'><b>Amount</b></div>
+                  </Col>
+                </Row>
+              </Col>
+            </Row>
+          </Col>
+        </Row>
+      }
       {props.cart.cart.length > 0 ? props.cart.cart.map((item, idx) => (
         <div key={idx}>
-          <Row >
-            <Col lg={4}>
-              <div className='text-14'><b>Product</b></div>
-            </Col>
-            <Col lg={8}>
-              <Row >
-                <Col lg={5}>
-                  <Row >
-                    <Col lg={6}>
-                      <div className='text-center text-14'><b>Color</b></div>
-                    </Col>
-                    <Col lg={6}>
-                      <div className='text-center text-14'><b>Size</b></div>
-                    </Col>
-                  </Row>
-                </Col>
-                <Col lg={7}>
-                  <Row >
-                    <Col lg={8}>
-                      <div className='text-center text-14'><b>Quanlity</b></div>
-                    </Col>
-                    <Col lg={4}>
-                      <div className='text-end text-14'><b>Amount</b></div>
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>
-            </Col>
-          </Row>
           <Row key={idx}>
             <Col lg={12}>
               <hr className='my-2' />

@@ -2,7 +2,7 @@ import React from 'react';
 import { Container } from "react-bootstrap";
 
 import './footer.css';
-import logo from '../../images/logo.svg';
+import logo from '../../logo.svg';
 import facebook from '../../images/facebook.svg';
 import twitter from '../../images/twitter.svg';
 import instagram from '../../images/instagram.svg';
