@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Alert } from 'react-bootstrap';
 
 export default function EditCart(props) {
     const handleChangeQuantity = async (qty) => {
@@ -18,11 +18,11 @@ export default function EditCart(props) {
             <Modal.Body>
                 <center>
                     <h4><b>Edit product</b></h4>
-                    {props.error && <p className='text-danger'><b>{props.error}</b></p>}
                 </center>
                 <div className='mx-4 mb-3'>
-                    <div className='d-flex align-items-baseline'>
-                        <p className='mb-5' style={{ width: '100px' }}>Color: </p>
+                    {props.error && <Alert variant='danger'>{props.error}</Alert>}
+                    <div className='d-flex align-items-center my-4'>
+                        <p className='' style={{ width: '100px' }}>Color: </p>
                         <div className='d-flex flex-wrap' style={{ width: '75%' }}>
                             {props.cart.cart.length > 0 && props.infoCartItem.cartIndex > -1 && props.cart.cart[props.infoCartItem.cartIndex].productId.colors.map((color, idx) => (
                                 <div style={{ width: '11%' }} key={color.code}>

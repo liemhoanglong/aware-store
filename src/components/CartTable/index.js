@@ -77,12 +77,13 @@ export default function CartTable(props) {
       try {
         let res = await CallAuthAPI('/user/update-cart', 'put', { cart: cartTemp.cart });
         // console.log(res.data);
-        props.setUpdateCart(prevState => (!prevState))//update cart
       }
       catch (err) {
         console.log(err);
       }
     }
+    setInfoCartItem({ cartIndex: -1, size: '', color: {}, quantity: 0 })
+    props.setUpdateCart(prevState => (!prevState))//update cart
     setLoad(false);
   }
 
@@ -130,7 +131,6 @@ export default function CartTable(props) {
       try {
         let res = await CallAuthAPI('/user/update-cart', 'put', { cart: cartTemp.cart });
         // console.log(res.data);
-        setLoad(false);
       }
       catch (err) {
         console.log(err);
@@ -138,6 +138,7 @@ export default function CartTable(props) {
       }
     }
     props.setUpdateCart(prevState => (!prevState))//update cart
+    setLoad(false);
   }
 
   return (

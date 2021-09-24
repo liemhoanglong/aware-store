@@ -16,7 +16,6 @@ export default function CartTotal(props) {
   const [info, setInfo] = useState({ feeShipping: 0, phone: '', address: '', note: '' });
   const [checkoutShow, setCheckoutShow] = useState(false);
   const [showInfoShip, setShowInfoShip] = useState(false);
-  console.log(isAuthenticated)
 
   useEffect(() => {
     props.cart.totalPriceRaw > 1000 ? setInfo(prevState => ({ ...prevState, feeShipping: 0 })) : setInfo(prevState => ({ ...prevState, feeShipping: 20 }));
