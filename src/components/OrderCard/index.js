@@ -35,7 +35,7 @@ export default function OrderCard(props) {
     <div className='jumbotron'>
       <div className='d-flex justify-content-between'>
         <div>
-          <span style={{ paddingRight: '20px', color: '#f27c24' }}>#{props.order._id}</span>
+          <span style={{ paddingRight: '20px', color: '#f27c24' }}>#{props.order.code}</span>
           <span style={{ paddingLeft: '20px', borderLeft: '1px solid black' }}>{(new Date(props.order.orderedDate) + '').slice(0, 24)}</span>
         </div>
         <div>
@@ -70,7 +70,7 @@ export default function OrderCard(props) {
               <Link to={'product-info/' + item.productId._id} className='link-custom'>
                 {item.productId.name}
               </Link>
-              <p className='m-0'>${item.price + '.00'}</p>
+              <p className='m-0'>{item.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
               <p className='m-0'>{'Size: ' + item.size + ' | Color: ' + item.color.name}</p>
               <p className='m-0'>QTY: {item.quantity}</p>
             </div>
@@ -83,9 +83,9 @@ export default function OrderCard(props) {
         </div>
       ))}
       <hr className=' mt-0' />
-      <p className="text-end">Subtotal: {props.order.feeShipping > 0 ? props.order.totalPrice - props.order.feeShipping + '.00' : props.order.totalPrice + '.00'}</p>
-      <p className="text-end">Fee Shipping: {props.order.feeShipping > 0 ? props.order.feeShipping + '.00' : 'Free'}</p>
-      <div className='m-0 text-end' style={{ color: '#f27c24' }}><span style={{ borderTop: '1px solid gray', paddingTop: '8px', paddingLeft: '15px' }}>Total Price: {props.order.totalPrice + '.00'}</span></div>
+      <p className="text-end">Subtotal: {props.order.feeShipping > 0 ? (props.order.totalPrice - props.order.feeShipping).toLocaleString('en-US', { style: 'currency', currency: 'USD' }).toLocaleString('en-US', { style: 'currency', currency: 'USD' }) : props.order.totalPrice.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
+      <p className="text-end">Fee Shipping: {props.order.feeShipping > 0 ? props.order.feeShipping.toLocaleString('en-US', { style: 'currency', currency: 'USD' }) : 'Free'}</p>
+      <div className='m-0 text-end' style={{ color: '#f27c24' }}><span style={{ borderTop: '1px solid gray', paddingTop: '8px', paddingLeft: '15px' }}>Total Price: {props.order.totalPrice.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</span></div>
     </div>
   )
 }

@@ -231,7 +231,7 @@ export default function CartTable(props) {
                       </div>
                     </Col>
                     <Col lg={4} className='text-center d-flex justify-content-end align-self-center'>
-                      <div className='text-end'>${item.productId.price}</div>
+                      <div className='text-end'>{item.productId.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</div>
                     </Col>
                   </Row>
                 </Col>

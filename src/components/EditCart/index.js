@@ -33,9 +33,12 @@ export default function EditCart(props) {
                     </div>
                     <div className='d-flex align-items-baseline'>
                         <p className='mb-5' style={{ width: '100px' }}>Size: </p>
-                        <button onClick={() => props.setInfoCartItem({ ...props.infoCartItem, size: 'S' })} className={`product-filter-size-item-btn${props.infoCartItem.size === 'S' ? '-active' : ''}`}>S</button>
-                        <button onClick={() => props.setInfoCartItem({ ...props.infoCartItem, size: 'M' })} className={`product-filter-size-item-btn${props.infoCartItem.size === 'M' ? '-active' : ''} mx-3`}>M</button>
-                        <button onClick={() => props.setInfoCartItem({ ...props.infoCartItem, size: 'L' })} className={`product-filter-size-item-btn${props.infoCartItem.size === 'L' ? '-active' : ''}`}>L</button>
+                        {props.cart.cart.length > 0 && props.infoCartItem.cartIndex > -1 && props.cart.cart[props.infoCartItem.cartIndex].productId.size.map((each, idx) => (
+                            <button onClick={() => props.setInfoCartItem({ ...props.infoCartItem, size: each.name })} className={`me-3 product-filter-size-item-btn${props.infoCartItem.size === each.name ? '-active' : ''}`} title={`Size ${each.name}`} disabled={props.cart.cart[props.infoCartItem.cartIndex].productId.sold[idx].quantity === each.quantity}>{each.name}</button>
+                        ))}
+                        {/* <button onClick={() => props.setInfoCartItem({ ...props.infoCartItem, size: 'S' })} className={`product-filter-size-item-btn${props.infoCartItem.size === 'S' ? '-active' : ''}`}>S</button> */}
+                        {/* <button onClick={() => props.setInfoCartItem({ ...props.infoCartItem, size: 'M' })} className={`product-filter-size-item-btn${props.infoCartItem.size === 'M' ? '-active' : ''} mx-3`}>M</button> */}
+                        {/* <button onClick={() => props.setInfoCartItem({ ...props.infoCartItem, size: 'L' })} className={`product-filter-size-item-btn${props.infoCartItem.size === 'L' ? '-active' : ''}`}>L</button> */}
                     </div>
                     <div className='d-flex align-items-baseline'>
                         <p className='mb-5' style={{ width: '100px' }}>Quantity: </p>

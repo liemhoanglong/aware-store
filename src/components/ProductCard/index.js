@@ -29,7 +29,7 @@ export default function ProductCard(props) {
                     <Link to={`/product-info/${props.product._id}`} className='link-custom product-card-name-text' title={props.product.name}>{props.product.name}</Link>
                 </div>
             </div>
-            <p className='product-card-price-text m-0'>${props.product.price}</p>
+            <p className='product-card-price-text m-0'>{props.product.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
         </div>
         // </Col>
     )

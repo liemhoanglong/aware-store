@@ -73,17 +73,17 @@ export default function CartTotal(props) {
             >
               <img src={Info} alt='info-logo' onClick={() => setShowInfoShip(!showInfoShip)} className="cursor-hover me-1" />
             </OverlayTrigger>
-            <span>{props.cart.totalPriceRaw > 1000 ? 'Free' : `$${config.FEE_SHIPPING}.00`}</span>
+            <span>{props.cart.totalPriceRaw > 1000 ? 'Free' : `${config.FEE_SHIPPING.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}`}</span>
           </div>
         </div>
         <div className='d-flex justify-content-between'>
           <span>Total product:</span>
-          <span>${props.cart.totalPriceRaw + '.00'}</span>
+          <span>{props.cart.totalPriceRaw.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</span>
         </div>
         <hr />
         <div className='d-flex justify-content-between'>
           <b><span>Subtotal</span></b>
-          <b><span>${props.cart.totalPriceRaw + info.feeShipping + '.00'}</span></b>
+          <b><span>{(props.cart.totalPriceRaw + info.feeShipping).toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</span></b>
         </div>
       </div>
       <Button onClick={handleCheckLogin} variant="danger" className='cart-btn-checkout' disabled={props.cart.cart.length > 0 ? 0 : 1}>Check out</Button>

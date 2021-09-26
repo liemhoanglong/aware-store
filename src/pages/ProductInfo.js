@@ -175,7 +175,7 @@ export default function ProductInfo(props) {
             <Col lg={11} className='product-info-detail'>
               <div>
                 <h1 className='product-info-detail-title m-0'>{product && product.name}</h1>
-                <p className='product-info-detail-price mb-2'>${product && product.price}</p>
+                <p className='product-info-detail-price mb-2'>{product && product.price.toLocaleString('en-US', { style: 'currency', currency: 'USD' })}</p>
                 <div className='d-flex'>
                   <StarIcon color={`${rate > 0 ? '#FFD543' : '#D4D3D3'}`} className='me-1' />
                   <StarIcon color={`${rate > 1 ? '#FFD543' : '#D4D3D3'}`} className='me-1' />
@@ -186,9 +186,9 @@ export default function ProductInfo(props) {
                 </div>
                 <div >
                   <p className='mt-4 text-14'>Size</p>
-                  <button onClick={() => setFilter(prevState => ({ ...prevState, size: 'S' }))} className={`product-info-size-item-btn${filter.size === 'S' ? '-active' : ''}`} title='Size S'>S</button>
-                  <button onClick={() => setFilter(prevState => ({ ...prevState, size: 'M' }))} className={`product-info-size-item-btn${filter.size === 'M' ? '-active' : ''} mx-3`} title='Size M'>M</button>
-                  <button onClick={() => setFilter(prevState => ({ ...prevState, size: 'L' }))} className={`product-info-size-item-btn${filter.size === 'L' ? '-active' : ''}`} title='Size L'>L</button>
+                  {product && product.size.map((each, idx) => (
+                    <button onClick={() => setFilter(prevState => ({ ...prevState, size: each.name }))} className={`me-3 product-info-size-item-btn${filter.size === each.name ? '-active' : ''}`} title={`Size ${each.name}`} disabled={product.sold[idx].quantity === each.quantity}>{each.name}</button>
+                  ))}
                 </div>
                 <div>
                   <p className='mt-4 text-14'>Color</p>
@@ -219,7 +219,7 @@ export default function ProductInfo(props) {
                 }
                 <hr className='mt-0' />
                 <div className='mt-2 text-12' >
-                  <div dangerouslySetInnerHTML={{ __html: product ? product.size[filter.size === 'S' ? 0 : filter.size === 'M' ? 1 : 2].info : '' }} />
+                  <div dangerouslySetInnerHTML={{ __html: product ? product.info : '' }} />
                 </div>
               </div>
             </Col>
