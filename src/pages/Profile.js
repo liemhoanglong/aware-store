@@ -85,12 +85,11 @@ export default function Profile(props) {
     return (
         <Container>
             <Row>
-                <br />
                 <Col lg={2}>
                     <h4>My Account</h4>
                     <br />
                     <p onClick={() => history.push('/profile/setting')} className={`cursor-hover text-14  ${state ? 'text-regular' : 'text-color-orange'}`}>Account setting</p>
-                    <p onClick={() => history.push('/profile/change-password')} className={`cursor-hover text-14 ${!state ? 'text-regular' : 'text-color-orange'}`}>Change password</p>
+                    <p onClick={() => history.push('/profile/change-password')} className={`cursor-hover text-14 ${!state ? 'text-regular' : 'text-color-orange'}`} style={{ marginBottom: 450 }}>Change password</p>
                 </Col>
                 <Col lg={10}>
                     <div className='profile-wrapper'>
@@ -99,7 +98,7 @@ export default function Profile(props) {
                                 <div className='d-flex justify-content-between mt-1 mb-3 text-14'>
                                     <b>Information</b>
                                     {!isEdit &&
-                                        <span onClick={() => setIsEdit(true)} className='cursor-hover text-regular'>
+                                        <span onClick={() => setIsEdit(true)} className='cursor-hover text-regular text-12' style={{ fontWeight: 500 }}>
                                             Edit
                                         </span>
                                     }
@@ -107,13 +106,13 @@ export default function Profile(props) {
                                 <form onSubmit={handleEditInfo} className='jumbotron'>
                                     {msgErr && <p className='text-center text-14 modal-text-error'>{msgErr}</p>}
                                     {msg && <p className='text-center text-14 text-success'>{msg}</p>}
-                                    <p className='mb-2 model-lable'><b>Name</b></p>
+                                    <p className='mb-2 model-lable'>Name</p>
                                     {isEdit ?
                                         <input value={inputInfo.name} onChange={e => setInputInfo({ ...inputInfo, name: e.target.value })} type='text' name='name' className={`mb-4 profile-input text-14`} placeholder='Enter your name...' required />
                                         : <p className='text-14 text-regular'>{inputInfo.name}</p>
                                     }
 
-                                    <p className='mb-2 model-lable'><b>E-mail</b></p>
+                                    <p className='mb-2 model-lable'>E-mail</p>
                                     {isEdit ?
                                         <input value={inputInfo.username} onChange={e => setInputInfo({ ...inputInfo, username: e.target.value })} type='email' name='username' className={`mb-4 profile-input text-14`} placeholder='Enter your e-mail...' required />
                                         : <p className='text-14 text-regular'>{inputInfo.username}</p>

@@ -21,7 +21,7 @@ export default function ProductInfo(props) {
   const [showAlert, setShowAlert] = useState(false);
 
   const [imgCurr, setImgCurr] = useState('')
-  const [filter, setFilter] = useState({ size: 'S', color: 0, quantity: 1 });
+  const [filter, setFilter] = useState({ size: '', color: 0, quantity: 1 });
   const productId = useParams().id;
 
   const [page, setPage] = useState(1);
@@ -57,6 +57,7 @@ export default function ProductInfo(props) {
         if (filterResProductDataByCate.length > 8)
           filterResProductDataByCate = filterResProductDataByCate.splice(0, 8);
         setProductByCate(filterResProductDataByCate);
+        setFilter({ size: resProductData.data.data.size[0].name, color: 0, quantity: 1 })
       } catch (err) {
         console.log(err)
         setLoad(false);
@@ -152,6 +153,15 @@ export default function ProductInfo(props) {
     // handleChangePage(pageNext);
   }
 
+  const [itemInStock, setItemInStock] = useState('');
+
+  useEffect(() => {
+    if (product && filter.size) {
+      let idx = product.size.findIndex(e => e.name === filter.size);
+      let res = product.size[idx].quantity - product.sold[idx].quantity;
+      return setItemInStock(res + ' item(s) in stock')
+    }
+  }, [product, filter]);
 
   return (
     <Container>
@@ -182,13 +192,14 @@ export default function ProductInfo(props) {
                   <StarIcon color={`${rate > 2 ? '#FFD543' : '#D4D3D3'}`} className='me-1' />
                   <StarIcon color={`${rate > 3 ? '#FFD543' : '#D4D3D3'}`} className='me-1' />
                   <StarIcon color={`${rate > 4 ? '#FFD543' : '#D4D3D3'}`} className='me-3' />
-                  <span className='text-regular text-14 ps-2' style={{ borderLeft: '1px solid #D4D3D3', marginTop: '-2px' }}>{commentData && commentData.count ? commentData.count : 0} review</span>
+                  <span className='text-regular text-14 ps-2' style={{ borderLeft: '1px solid #D4D3D3', marginTop: '-2px' }}>{commentData && commentData.count ? commentData.count : 0} review(s)</span>
                 </div>
                 <div >
                   <p className='mt-4 text-14'>Size</p>
                   {product && product.size.map((each, idx) => (
                     <button onClick={() => setFilter(prevState => ({ ...prevState, size: each.name }))} className={`me-3 product-info-size-item-btn${filter.size === each.name ? '-active' : ''}`} title={`Size ${each.name}`} disabled={product.sold[idx].quantity === each.quantity}>{each.name}</button>
                   ))}
+                  <p className='mt-4 text-14 text-danger'><b>{itemInStock}</b></p>
                 </div>
                 <div>
                   <p className='mt-4 text-14'>Color</p>
