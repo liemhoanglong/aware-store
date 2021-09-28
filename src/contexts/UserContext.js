@@ -14,12 +14,12 @@ function UserProvider({ children }) {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      console.log('user context')
-      console.log(loginState)
+      // console.log('user context')
+      // console.log(loginState)
       if (!loginState.isAuthenticated || loginState.isReset) {
         try {
           const res = await CallAuthAPI('/user/profile', 'GET', null);
-          console.log(res.data)
+          // console.log(res.data)
           if (res.status === 200) {
             if (loginState.isReset) {
               setLoginState({ isAuthenticated: true, isReset: false, profile: res.data })

@@ -50,7 +50,7 @@ export default function OrderCard(props) {
           {props.order.status === 0 &&
             <div className="custom-dropdown cursor-hover">
               {
-                // Date.now() - parseInt(props.order.code, 16) < 30 * 60 * 1000 &&
+                Date.now() - parseInt(props.order.code, 16) < 30 * 60 * 1000 &&
                 <img style={{ marginBottom: '2px' }} src={threeDot} alt='more action' />
               }
               <div className="dropdown-content-right">

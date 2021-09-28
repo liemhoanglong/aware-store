@@ -38,7 +38,7 @@ export default function MyOrders(props) {
     // console.log(orderIndex)
     // console.log(orderId)
     try {
-      await CallAuthAPI(`/order/cancel/${orderId}`, 'get', null)
+      let res = await CallAuthAPI(`/order/cancel/${orderId}`, 'get', null)
     } catch (err) {
       console.log(err)
       setLoad(false);

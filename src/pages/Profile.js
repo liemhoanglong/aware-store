@@ -33,8 +33,8 @@ export default function Profile(props) {
         // }
         // fetchAll();
         if (profile) {
-            console.log('profile page')
-            console.log(profile)
+            // console.log('profile page')
+            // console.log(profile)
             setInputInfo({
                 name: profile.name,
                 username: profile.username,
@@ -84,7 +84,7 @@ export default function Profile(props) {
             setMsg('Change password success');
         } catch (err) {
             setMsgErr(err.response.data.err);
-            console.log(err.response.data);
+            console.log(err);
         }
     }
 
