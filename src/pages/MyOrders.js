@@ -112,7 +112,7 @@ export default function MyOrders(props) {
         show={acceptShow}
         onHide={() => setAcceptShow(false)}
         onAccepted={() => handleCancelOrder()}
-        title='Do you really want to cancel this order?'
+        title='Are you sure you want to cancel this order?'
       />
       <Review
         show={writeReviewShow}

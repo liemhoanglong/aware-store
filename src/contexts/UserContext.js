@@ -10,29 +10,36 @@ let UserStateContext = React.createContext();
 let UserDispatchContext = React.createContext();
 
 function UserProvider({ children }) {
-  const [loginState, setLoginState] = React.useState({ isAuthenticated: false, profile: null });
+  const [loginState, setLoginState] = React.useState({ isAuthenticated: null, isReset: false, profile: null });
 
   React.useEffect(() => {
     const fetchData = async () => {
-      if (!loginState.isAuthenticated) {
+      console.log('user context')
+      console.log(loginState)
+      if (!loginState.isAuthenticated || loginState.isReset) {
         try {
-          // console.log('user context')
-          // console.log(loginState)
           const res = await CallAuthAPI('/user/profile', 'GET', null);
-          // console.log(res.data)
-          if (res) {
-            setLoginState({ isAuthenticated: true, profile: res.data })
+          console.log(res.data)
+          if (res.status === 200) {
+            if (loginState.isReset) {
+              setLoginState({ isAuthenticated: true, isReset: false, profile: res.data })
+              return;
+            }
+            if (loginState.isAuthenticated === true) return;
+            setLoginState({ isAuthenticated: true, isReset: false, profile: res.data })
           } else {
-            setLoginState({ isAuthenticated: false, profile: null })
+            if (loginState.isAuthenticated === false) return;
+            setLoginState({ isAuthenticated: false, isReset: false, profile: null })
           }
         } catch (err) {
           console.log(err)
-          setLoginState({ isAuthenticated: false, profile: null })
+          if (loginState.isAuthenticated === false) return;
+          setLoginState({ isAuthenticated: false, isReset: false, profile: null })
         }
       }
     }
     fetchData();
-  }, [loginState.isAuthenticated])
+  }, [loginState.isAuthenticated, loginState.isReset])
 
   // console.log(loginState)
   return (
@@ -70,7 +77,7 @@ function loginUser(dispatch, username, password, history, setIsLoading, setError
         localStorage.setItem(TOKEN, res.data.token)
         setError(false);
         setIsLoading(false);
-        dispatch({ isAuthenticated: LOGIN_SUCCESS });
+        dispatch({ isAuthenticated: false });
       })
       .catch(err => {
         console.log(err)
@@ -89,8 +96,12 @@ function loginUser(dispatch, username, password, history, setIsLoading, setError
 
 function logoutUser(dispatch, history) {
   localStorage.removeItem(TOKEN);
-  dispatch({ type: LOGOUT_SUCCESS, user: null });
+  dispatch({ type: LOGOUT_SUCCESS });
   history.push("/");
 }
 
-export { UserProvider, useUserState, useUserDispatch, loginUser, logoutUser };
+function resetUserState(dispatch) {
+  dispatch({ isAuthenticated: true, isReset: true });
+}
+
+export { UserProvider, useUserState, useUserDispatch, loginUser, logoutUser, resetUserState };

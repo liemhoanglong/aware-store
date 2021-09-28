@@ -2,8 +2,17 @@ import React from 'react';
 import { Modal, Button, Alert } from 'react-bootstrap';
 
 export default function EditCart(props) {
+    let item = props.cart.cart[props.infoCartItem.cartIndex];
+    let sizeId = -1;
+    if (item)
+        sizeId = item.productId.size.findIndex(e => e.name === item.size);
+    let itemInStock;
+    if (sizeId > -1)
+        itemInStock = item.productId.size[sizeId].quantity - item.productId.sold[sizeId].quantity;
     const handleChangeQuantity = async (qty) => {
-        if (qty < 1 || isNaN(qty)) return;
+        if (qty < 1) return;
+        if (qty > itemInStock)
+            qty = itemInStock;
         props.setInfoCartItem({ ...props.infoCartItem, quantity: qty })
     }
 
@@ -24,7 +33,7 @@ export default function EditCart(props) {
                     <div className='d-flex align-items-center my-4'>
                         <p className='' style={{ width: '100px' }}>Color: </p>
                         <div className='d-flex flex-wrap' style={{ width: '75%' }}>
-                            {props.cart.cart.length > 0 && props.infoCartItem.cartIndex > -1 && props.cart.cart[props.infoCartItem.cartIndex].productId.colors.map((color, idx) => (
+                            {props.cart.cart.length > 0 && props.infoCartItem.cartIndex > -1 && item.productId.colors.map((color, idx) => (
                                 <div style={{ width: '11%' }} key={color.code}>
                                     <button onClick={() => props.setInfoCartItem({ ...props.infoCartItem, color })} title={color.name} className={`product-filter-color-item${props.infoCartItem.color.code === color.code ? '-active' : ''}`} title={color.name} style={{ backgroundColor: color.code }} />
                                 </div>
@@ -32,13 +41,14 @@ export default function EditCart(props) {
                         </div>
                     </div>
                     <div className='d-flex align-items-baseline'>
-                        <p className='mb-5' style={{ width: '100px' }}>Size: </p>
-                        {props.cart.cart.length > 0 && props.infoCartItem.cartIndex > -1 && props.cart.cart[props.infoCartItem.cartIndex].productId.size.map((each, idx) => (
-                            <button onClick={() => props.setInfoCartItem({ ...props.infoCartItem, size: each.name })} className={`me-3 product-filter-size-item-btn${props.infoCartItem.size === each.name ? '-active' : ''}`} title={`Size ${each.name}`} disabled={props.cart.cart[props.infoCartItem.cartIndex].productId.sold[idx].quantity === each.quantity}>{each.name}</button>
+                        <p className='mb-4' style={{ width: '100px' }}>Size: </p>
+                        {props.cart.cart.length > 0 && props.infoCartItem.cartIndex > -1 && item.productId.size.map((each, idx) => (
+                            <button key={idx} onClick={() => props.setInfoCartItem({ ...props.infoCartItem, size: each.name })} className={`me-3 product-filter-size-item-btn${props.infoCartItem.size === each.name ? '-active' : ''}`} title={`Size ${each.name}`} disabled={item.productId.sold[idx].quantity === each.quantity}>{each.name}</button>
                         ))}
-                        {/* <button onClick={() => props.setInfoCartItem({ ...props.infoCartItem, size: 'S' })} className={`product-filter-size-item-btn${props.infoCartItem.size === 'S' ? '-active' : ''}`}>S</button> */}
-                        {/* <button onClick={() => props.setInfoCartItem({ ...props.infoCartItem, size: 'M' })} className={`product-filter-size-item-btn${props.infoCartItem.size === 'M' ? '-active' : ''} mx-3`}>M</button> */}
-                        {/* <button onClick={() => props.setInfoCartItem({ ...props.infoCartItem, size: 'L' })} className={`product-filter-size-item-btn${props.infoCartItem.size === 'L' ? '-active' : ''}`}>L</button> */}
+                    </div>
+                    <div className='d-flex align-items-baseline'>
+                        <p className='mb-5' style={{ width: '100px' }}></p>
+                        <p className='text-14 text-danger'><b>{itemInStock > 0 ? itemInStock + ' item(s) in stock' : 'Out of stock'}</b></p>
                     </div>
                     <div className='d-flex align-items-baseline'>
                         <p className='mb-5' style={{ width: '100px' }}>Quantity: </p>

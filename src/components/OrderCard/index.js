@@ -49,7 +49,10 @@ export default function OrderCard(props) {
           }
           {props.order.status === 0 &&
             <div className="custom-dropdown cursor-hover">
-              <img style={{ marginBottom: '2px' }} src={threeDot} alt='more action' />
+              {
+                // Date.now() - parseInt(props.order.code, 16) < 30 * 60 * 1000 &&
+                <img style={{ marginBottom: '2px' }} src={threeDot} alt='more action' />
+              }
               <div className="dropdown-content-right">
                 <div className="dropdown-content-group-right">
                   <span onClick={props.handleAcceptCancelOrder} className="link-custom dropdown-item-right">Cancel order</span>

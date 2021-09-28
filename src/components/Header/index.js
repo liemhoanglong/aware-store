@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Button, Row, Col, Form, FormControl } from "react-bootstrap";
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
+import QueryString from 'query-string';
 
 import './header.css';
 import logo from '../../logo.svg';
@@ -12,17 +13,21 @@ import { useUserState, logoutUser, useUserDispatch } from "../../contexts/UserCo
 export default function Header(props) {
   const { isAuthenticated } = useUserState();
   const userDispatch = useUserDispatch();
-
   const catelists = props.catelists;
   const [search, setSearch] = useState('');
   const history = useHistory();
+  const location = useLocation();
   // console.log(props.user)
-  const onSearch = (e) => {
-    if (e) {
-      e.preventDefault();
-    }
+  let queryObject = QueryString.parse(location.search);
+
+  useEffect(() => {
+    queryObject.name = queryObject.name === undefined ? '' : queryObject.name;
+    setSearch(queryObject.name);
+  }, [])
+
+  const handleSearch = (e) => {
+    e.preventDefault();
     history.push(`/product-list?name=${e.target[0].value}`);
-    e.target[0].value = '';
   }
 
   return (
@@ -30,7 +35,7 @@ export default function Header(props) {
       <Container>
         <Row className='header-group'>
           <Col>
-            <Form className='header-search d-flex' onSubmit={(e) => onSearch(e)}>
+            <Form className='header-search d-flex' onSubmit={(e) => handleSearch(e)}>
               <FormControl
                 className='text-14'
                 type="text"

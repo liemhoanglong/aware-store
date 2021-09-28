@@ -10,7 +10,7 @@ import instagram from '../../images/instagram.svg';
 export default function Footer(props) {
 
     return (
-        <footer>
+        <footer className='mt-auto'>
             <hr style={{ color: 'lightgray', boxShadow: '.1px 0 .7px rgba(0, 0, 0, 2)', marginTop: '57px' }} />
             <Container>
                 <div className='d-flex justify-content-between flex-wrap' style={{ alignItems: 'baseline' }}>

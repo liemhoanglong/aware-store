@@ -5,17 +5,19 @@ import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import CallAuthAPI from '../../services/CallAuthAPI';
 import { useUserState } from "../../contexts/UserContext";
 import Progress from '../Progress';
-import Checkout from '../Checkout';
+import PopupCheckout from '../PopupCheckout';
 import config from '../../constants/config';
 import Info from '../../images/info.svg';
+import validatePhone from '../../utils/validatePhone';
 
 export default function CartTotal(props) {
-  const { isAuthenticated } = useUserState();
+  const { profile, isAuthenticated } = useUserState();
   const [load, setLoad] = useState(false);
   // const history = useHistory();
   const [info, setInfo] = useState({ feeShipping: 0, phone: '', address: '', note: '' });
   const [checkoutShow, setCheckoutShow] = useState(false);
   const [showInfoShip, setShowInfoShip] = useState(false);
+  const [msg, setMsg] = useState('');
 
   useEffect(() => {
     props.cart.totalPriceRaw > 1000 ? setInfo(prevState => ({ ...prevState, feeShipping: 0 })) : setInfo(prevState => ({ ...prevState, feeShipping: 20 }));
@@ -26,21 +28,28 @@ export default function CartTotal(props) {
       props.setLoginShow(true)//open login
       return;
     }
-    setCheckoutShow(true)
+    setInfo(prevState => ({ ...prevState, phone: profile.phone, address: profile.address }));
+    setCheckoutShow(true);
   }
 
   const handleCheckOut = async () => {
+    setMsg('');
+    if (!validatePhone(info.phone)) {
+      setMsg('Your phone number does not exist!');
+      return;
+    }
     setLoad(true);
     try {
       let res = await CallAuthAPI('/order/create', 'post', info);
       localStorage.removeItem('CART');
       props.setUpdateCart(prevState => (!prevState))//update cart
       setLoad(false);
-      setCheckoutShow(false)
+      setCheckoutShow(false);
       // history.push('/');
     }
     catch (err) {
       console.log(err);
+      setMsg(err.response.data.err)
       setLoad(false);
     }
   }
@@ -52,12 +61,14 @@ export default function CartTotal(props) {
   );
 
   return (
-    <div>
+    <div style={{ marginBottom: 240 }}>
       <Progress isLoad={load} />
-      <Checkout
+      <PopupCheckout
         show={checkoutShow}
-        onHide={() => setCheckoutShow(false)}
+        onHide={() => { setMsg(''); setCheckoutShow(false); }}
+        info={info}
         setInfo={setInfo}
+        msg={msg}
         onAccepted={() => handleCheckOut()}
       />
       <div className='text-14'><b>Total</b></div>

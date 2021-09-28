@@ -18,6 +18,7 @@ export default function ProductList(props) {
     const location = useLocation();
     const history = useHistory();
     const [brandData, setBrandData] = useState([]);
+    const [colorsData, setColorsData] = useState([]);
     const [categroup, setCategroup] = useState('');
     const [load, setLoad] = useState(true);
     const [filter, setFilter] = useState({
@@ -40,8 +41,11 @@ export default function ProductList(props) {
         const fetchAll = async () => {
             try {
                 let callBrand = CallAPI('/brand', 'get', null);
-                let res = await callBrand;
-                setBrandData(res.data.data);
+                let callColors = CallAPI('/color', 'get', null);
+                let resBrand = await callBrand;
+                let resColors = await callColors;
+                setBrandData(resBrand.data.data);
+                setColorsData(resColors.data.data)
             } catch (err) {
                 console.log(err)
             }
@@ -183,6 +187,7 @@ export default function ProductList(props) {
                 <Col lg={2}>
                     <SideBar
                         brandData={brandData}
+                        colorsData={colorsData}
                         setFilter={setFilter}
                         filter={filter}
                         categroup={categroup}

@@ -57,7 +57,7 @@ export default function ProductInfo(props) {
         if (filterResProductDataByCate.length > 8)
           filterResProductDataByCate = filterResProductDataByCate.splice(0, 8);
         setProductByCate(filterResProductDataByCate);
-        setFilter({ size: resProductData.data.data.size[0].name, color: 0, quantity: 1 })
+        setFilter({ size: '', color: 0, quantity: 1 })
       } catch (err) {
         console.log(err)
         setLoad(false);
@@ -85,6 +85,11 @@ export default function ProductInfo(props) {
   // console.log(filter);
   const handleAddProductToCart = async () => {
     setShowAlert(false);
+    if (!filter.size) {
+      setShowAlert(true);
+      setAlert({ type: 'warning', info: 'Your must choice size before add to cart! ⚠️' })
+      return;
+    }
     setLoad(true);
     let cartTemp = JSON.parse(JSON.stringify(props.cart.cart));//clone cart
     for (let i = 0; i < cartTemp.length; i++) {//check already in your cart
@@ -153,14 +158,20 @@ export default function ProductInfo(props) {
     // handleChangePage(pageNext);
   }
 
-  const [itemInStock, setItemInStock] = useState('');
+  const [itemInStock, setItemInStock] = useState(null);
 
   useEffect(() => {
-    if (product && filter.size) {
+    if (!product) return;
+    if (product.status === 0) {
+      setItemInStock('Sold out');
+      return;
+    }
+    if (filter.size) {
       let idx = product.size.findIndex(e => e.name === filter.size);
       let res = product.size[idx].quantity - product.sold[idx].quantity;
-      return setItemInStock(res + ' item(s) in stock')
+      return setItemInStock(res + ' item(s) in stock');
     }
+
   }, [product, filter]);
 
   return (
@@ -197,7 +208,7 @@ export default function ProductInfo(props) {
                 <div >
                   <p className='mt-4 text-14'>Size</p>
                   {product && product.size.map((each, idx) => (
-                    <button onClick={() => setFilter(prevState => ({ ...prevState, size: each.name }))} className={`me-3 product-info-size-item-btn${filter.size === each.name ? '-active' : ''}`} title={`Size ${each.name}`} disabled={product.sold[idx].quantity === each.quantity}>{each.name}</button>
+                    <button key={each.name} onClick={() => setFilter(prevState => ({ ...prevState, size: each.name, quantity: 1 }))} className={`me-3 product-info-size-item-btn${filter.size === each.name ? '-active' : ''}`} title={`Size ${each.name}`} disabled={product.sold[idx].quantity === each.quantity}>{each.name}</button>
                   ))}
                   <p className='mt-4 text-14 text-danger'><b>{itemInStock}</b></p>
                 </div>
@@ -215,11 +226,11 @@ export default function ProductInfo(props) {
                   <p className='mt-4 text-14'>Quantity</p>
                   <div style={{ margin: '15px 0 5px 21px', padding: '5px 10px', border: '2px solid #d4d3d3' }}>
                     <span onClick={() => setFilter(prevState => ({ ...prevState, quantity: prevState.quantity > 1 ? prevState.quantity - 1 : 1 }))} className='p-2 cursor-hover cart-item-quanlity-btn'>-</span>
-                    <input type='number' onChange={(e) => setFilter(prevState => ({ ...prevState, quantity: (!isNaN(e.target.value) && e.target.value > 1) ? e.target.value : 1 }))} name='quantitity' value={filter.quantity} className='text-center' style={{ width: '36px', border: 'none' }} />
-                    <span onClick={() => setFilter(prevState => ({ ...prevState, quantity: prevState.quantity + 1 }))} className='p-2 cursor-hover cart-item-quanlity-btn'>+</span>
+                    <input type='number' onChange={(e) => setFilter(prevState => ({ ...prevState, quantity: e.target.value > itemInStock ? itemInStock : e.target.value > 1 ? e.target.value : 1 }))} name='quantitity' value={filter.quantity} className='text-center' style={{ width: '36px', border: 'none' }} />
+                    <span onClick={() => setFilter(prevState => ({ ...prevState, quantity: prevState.quantity === itemInStock ? itemInStock : prevState.quantity + 1 }))} className='p-2 cursor-hover cart-item-quanlity-btn'>+</span>
                   </div>
                 </div>
-                <Button onClick={handleAddProductToCart} className='product-info-bnt-add-to-cart'>Add to cart</Button>
+                <Button onClick={handleAddProductToCart} className='product-info-bnt-add-to-cart' disabled={product && product.status ? 0 : 1}>Add to cart</Button>
                 {showAlert ?
                   <Alert variant={alert.type} onClose={() => setShowAlert(false)} dismissible>
                     <p>

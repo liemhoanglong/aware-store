@@ -117,7 +117,7 @@ function App() {
   // console.log(catelists)
 
   return (
-    <div className='App'>
+    <div className='App d-flex flex-column h-100 vsc-initialized'>
       <Router>
         {/* component load */}
         <Progress isLoad={load} />

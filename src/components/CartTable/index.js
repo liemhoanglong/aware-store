@@ -20,7 +20,14 @@ export default function CartTable(props) {
   const [error, setError] = useState('');
 
   const handleChangeQuantity = async (cartIndex, qty) => {
-    if (qty < 1 || isNaN(qty)) return;
+    let product = props.cart.cart[cartIndex];
+    let sizeId = product.productId.size.findIndex(e => e.name === product.size);
+    let itemInStock = product.productId.size[sizeId].quantity - product.productId.sold[sizeId].quantity;
+    if (qty < 1 || qty === itemInStock + 1) return;
+    if (qty > itemInStock)
+      qty = itemInStock;
+    if (qty === product.quantity) return;
+    setInfoCartItem({ ...props.infoCartItem, quantity: qty })
     setLoad(true)
     let cartTemp = JSON.parse(JSON.stringify(props.cart));//clone cart
     if (cartTemp.cart[cartIndex].quantity === Number(qty)) return;
@@ -207,7 +214,6 @@ export default function CartTable(props) {
                   </div>
                 </div>
               </div>
-              {/* <div>product</div> */}
             </Col>
             <Col lg={8}>
               <Row style={{ height: '100%' }}>

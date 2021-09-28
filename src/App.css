@@ -370,8 +370,12 @@ input[type=number]::-webkit-outer-spin-button {
   font-weight: bold;
 }
 
-.product-info-size-item-btn:hover{
+.product-info-size-item-btn:hover:enabled{
   box-shadow: 0 1px 8px 0 rgba(0, 0, 0, .8);
+}
+
+.product-info-size-item-btn:disabled{
+  border: 1px solid #d4d3d3;
 }
 
 .product-info-bnt-add-to-cart{
