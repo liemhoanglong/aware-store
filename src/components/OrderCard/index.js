@@ -16,6 +16,7 @@ export default function OrderCard(props) {
       size: data.size,
       index: idx
     }));
+    props.setCallMyReview(prevState => (!prevState));
   }
 
   const handleEditReview = (data, idx) => {

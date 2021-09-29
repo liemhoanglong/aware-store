@@ -104,8 +104,8 @@ export default function ProductInfo(props) {
         }
       }
     }
-    console.log(filter.quantity + sumQtyProductSameId)
-    console.log(Number(itemInStock.split(' ')[0]))
+    // console.log(filter.quantity + sumQtyProductSameId)
+    // console.log(Number(itemInStock.split(' ')[0]))
     if (filter.quantity + sumQtyProductSameId > Number(itemInStock.split(' ')[0])) {
       setLoad(false);
       setShowAlert(true);
