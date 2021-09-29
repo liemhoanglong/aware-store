@@ -10,6 +10,21 @@ export default function EditCart(props) {
     if (sizeId > -1)
         itemInStock = item.productId.size[sizeId].quantity - item.productId.sold[sizeId].quantity;
     const handleChangeQuantity = async (qty) => {
+        let cart = props.cart.cart;
+        let product = cart[props.infoCartItem.cartIndex];
+        let sumQtyProductSameIdAndSize = 0;
+        for (let i = 0; i < cart.length; i++) {//check already in your cart
+            // console.log(cart[i])
+            if (cart[i].productId._id === product.productId._id && product.size === cart[i].size) {
+                sumQtyProductSameIdAndSize += cart[i].quantity;
+            }
+        }
+        // console.log(sumQtyProductSameIdAndSize)
+        // console.log(itemInStock)
+        if (qty - cart[props.infoCartItem.cartIndex].quantity + sumQtyProductSameIdAndSize > itemInStock) {
+            return 1;
+        }
+
         if (qty < 1) return;
         if (qty > itemInStock)
             qty = itemInStock;

@@ -20,9 +20,23 @@ export default function CartTable(props) {
   const [error, setError] = useState('');
 
   const handleChangeQuantity = async (cartIndex, qty) => {
-    let product = props.cart.cart[cartIndex];
+    let cart = props.cart.cart;
+    let product = cart[cartIndex];
     let sizeId = product.productId.size.findIndex(e => e.name === product.size);
     let itemInStock = product.productId.size[sizeId].quantity - product.productId.sold[sizeId].quantity;
+    let sumQtyProductSameIdAndSize = 0;
+    for (let i = 0; i < cart.length; i++) {//check already in your cart
+      // console.log(cart[i])
+      if (cart[i].productId._id === product.productId._id && product.size === cart[i].size) {
+        sumQtyProductSameIdAndSize += cart[i].quantity;
+      }
+    }
+    // console.log(sumQtyProductSameIdAndSize)
+    // console.log(itemInStock)
+    if (qty - cart[cartIndex].quantity + sumQtyProductSameIdAndSize > itemInStock) {
+      return 1;
+    }
+
     if (qty < 1 || qty === itemInStock + 1) return;
     if (qty > itemInStock)
       qty = itemInStock;

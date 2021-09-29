@@ -92,13 +92,25 @@ export default function ProductInfo(props) {
     }
     setLoad(true);
     let cartTemp = JSON.parse(JSON.stringify(props.cart.cart));//clone cart
+    let sumQtyProductSameId = 0;
     for (let i = 0; i < cartTemp.length; i++) {//check already in your cart
-      if (cartTemp[i].productId._id === productId && product.colors[filter.color]._id === cartTemp[i].color._id && filter.size === cartTemp[i].size) {
-        setLoad(false);
-        setShowAlert(true);
-        setAlert({ type: 'danger', info: 'This product is already in your cart! ❌' })
-        return;
+      if (cartTemp[i].productId._id === productId && filter.size === cartTemp[i].size) {
+        sumQtyProductSameId += cartTemp[i].quantity;
+        if (product.colors[filter.color]._id === cartTemp[i].color._id) {
+          setLoad(false);
+          setShowAlert(true);
+          setAlert({ type: 'danger', info: 'This product is already in your cart! ❌' })
+          return;
+        }
       }
+    }
+    console.log(filter.quantity + sumQtyProductSameId)
+    console.log(Number(itemInStock.split(' ')[0]))
+    if (filter.quantity + sumQtyProductSameId > Number(itemInStock.split(' ')[0])) {
+      setLoad(false);
+      setShowAlert(true);
+      setAlert({ type: 'danger', info: 'This product is not enough in stock! ❌' })
+      return;
     }
     cartTemp.push({
       productId: product,
