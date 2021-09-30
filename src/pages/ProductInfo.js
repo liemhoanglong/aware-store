@@ -9,6 +9,7 @@ import Comment from '../components/Comment';
 import CallAPI from '../services/CallAPI';
 import CallAuthAPI from '../services/CallAuthAPI';
 import { useUserState } from "../contexts/UserContext";
+import productImage from '../images/no-img.png';
 
 export default function ProductInfo(props) {
   const { isAuthenticated } = useUserState();
@@ -194,12 +195,12 @@ export default function ProductInfo(props) {
         <Col lg={1}>
           <div className='product-info-thumbnail-wrapper'>
             {product && product.imageList.map((image, idx) => (
-              <img key={idx} className='product-info-thumbnail cursor-hover' onClick={() => { (imgCurr !== image) && setImgCurr(image); }} src={image} alt={product.name + idx} title={product && product.name + ' ' + idx} />
+              <img key={idx} className='product-info-thumbnail cursor-hover' onClick={() => { (imgCurr !== image) && setImgCurr(image); }} src={image ? image : productImage} alt={product.name + idx} title={product && product.name + ' ' + idx} />
             ))}
           </div>
         </Col>
         <Col lg={4}>
-          <img className='product-info-img' title={product && product.name + 'main'} src={imgCurr} alt={product && product.name + ' main'} />
+          <img className='product-info-img' title={product && product.name + 'main'} src={imgCurr ? imgCurr : productImage} alt={product && product.name + ' main'} />
         </Col>
         <Col lg={5}>
           <Row style={{ height: '100%' }}>
@@ -336,7 +337,7 @@ export default function ProductInfo(props) {
               <Col lg={3} key={product._id}>
                 <Link to={'/product-info/' + product._id} className='link-custom'>
                   <img className='img-cover' src={product.imageList[0]} alt={product.name} width='100%' height='195px' />
-                  <span className='text-regular text-14'>{product.name}</span>
+                  <span className='text-regular text-14 product-card-name-text'>{product.name}</span>
                 </Link>
               </Col>
             ))}

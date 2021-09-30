@@ -3,17 +3,18 @@ import PropTypes from "prop-types";
 
 import "./styles.css";
 
-const MultiRangeSlider = ({ min, max, onChange }) => {
-  const [minVal, setMinVal] = useState(min);
-  const [maxVal, setMaxVal] = useState(max);
+const MultiRangeSlider = ({ min, max, minDefault, maxDefault, onChange }) => {
+  const [minVal, setMinVal] = useState(Number(min));
+  const [maxVal, setMaxVal] = useState(Number(max));
   const minValRef = useRef(min);
   const maxValRef = useRef(max);
   const range = useRef(null);
 
+
   // Convert to percentage
   const getPercent = useCallback(
-    (value) => Math.round(((value - min) / (max - min)) * 100),
-    [min, max]
+    (value) => Math.round(((value - minDefault) / (maxDefault - minDefault)) * 100),
+    [minDefault, maxDefault]
   );
 
   // Set width of the range to decrease from the left side
@@ -46,11 +47,11 @@ const MultiRangeSlider = ({ min, max, onChange }) => {
     <div className='mb-4'>
       <input
         type="range"
-        min={min}
-        max={max}
+        min={minDefault}
+        max={maxDefault}
         value={minVal}
         onChange={(event) => {
-          const value = Math.min(Number(event.target.value), maxVal - 1);
+          const value = Math.min(Number(event.target.value), maxVal - 100);
           setMinVal(value);
           minValRef.current = value;
         }}
@@ -59,11 +60,11 @@ const MultiRangeSlider = ({ min, max, onChange }) => {
       />
       <input
         type="range"
-        min={min}
-        max={max}
+        min={minDefault}
+        max={maxDefault}
         value={maxVal}
         onChange={(event) => {
-          const value = Math.max(Number(event.target.value), minVal + 1);
+          const value = Math.max(Number(event.target.value), minVal + 100);
           setMaxVal(value);
           maxValRef.current = value;
         }}
@@ -83,6 +84,8 @@ const MultiRangeSlider = ({ min, max, onChange }) => {
 MultiRangeSlider.propTypes = {
   min: PropTypes.number.isRequired,
   max: PropTypes.number.isRequired,
+  minDefault: PropTypes.number.isRequired,
+  maxDefault: PropTypes.number.isRequired,
   onChange: PropTypes.func.isRequired
 };
 

@@ -9,6 +9,7 @@ import cart from '../../images/cart.svg';
 import avatar from '../../images/avatar.jpg';
 import arrowDown from '../../images/arrow-down.svg';
 import { useUserState, logoutUser, useUserDispatch } from "../../contexts/UserContext";
+import productImage from '../../images/no-img.png';
 
 export default function Header(props) {
   const { isAuthenticated } = useUserState();
@@ -88,7 +89,7 @@ export default function Header(props) {
                     <div className='dropdown-content-group-right'>
                       {props.cart && props.cart.cart.map((item, idx) => (
                         <Link to={`/product-info/${item.productId._id}`} key={idx} title={item.productId.name} className='d-flex dropdown-item-right link-custom'>
-                          <img className='img-cover' width='60px' height='60px' src={item.productId.imageList[0]} alt={item.productId.name} />
+                          <img className='img-cover' width='60px' height='60px' src={item.productId.imageList[0] ? item.productId.imageList[0] : productImage} alt={item.productId.name} />
                           <div style={{ width: '200px', padding: '5px 5px 5px 20px' }} className='d-flex flex-column justify-content-between'>
                             <span className='dropdown-cart-item-name'>{item.productId.name}</span>
                             <div className='d-flex justify-content-between'>

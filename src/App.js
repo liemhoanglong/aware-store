@@ -17,6 +17,8 @@ import ProductInfo from "./pages/ProductInfo";
 import ShoppingCart from "./pages/ShoppingCart";
 import MyOrders from "./pages/MyOrders";
 import PageNotFound from "./pages/PageNotFound";
+import ScrollToTop from "./components/ScrollToTop";
+
 import { useUserState } from "./contexts/UserContext";
 
 function App() {
@@ -118,6 +120,7 @@ function App() {
 
   return (
     <div className='App d-flex flex-column h-100 vsc-initialized'>
+      <ScrollToTop />
       <Router>
         {/* component load */}
         <Progress isLoad={load} />

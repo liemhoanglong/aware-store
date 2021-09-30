@@ -9,6 +9,7 @@ import Progress from '../Progress';
 import Accept from '../Accept';
 import EditCart from '../EditCart';
 import goShoppingNow from '../../images/go-shopping-now.png';
+import productImage from '../../images/no-img.png';
 
 export default function CartTable(props) {
   const { isAuthenticated } = useUserState();
@@ -219,7 +220,7 @@ export default function CartTable(props) {
             </Col>
             <Col lg={4}>
               <div className='cart-item-product-col text-14 d-flex'>
-                <Link to={`product-info/${item.productId._id}`}><img className='cart-item-product-col-img' src={item.productId.imageList[0]} alt={item.productId.name} width='80px' height='100%' /></Link>
+                <Link to={`product-info/${item.productId._id}`}><img className='cart-item-product-col-img' src={item.productId.imageList[0] ? item.productId.imageList[0] : productImage} alt={item.productId.name} width='80px' height='100%' /></Link>
                 <div className='d-flex justify-content-between flex-column' style={{ marginLeft: '20px' }}>
                   <Link to={`product-info/${item.productId._id}`} className='link-custom cart-item-product-col-name'>{item.productId.name}</Link>
                   <div>

@@ -14,6 +14,15 @@ import config from '../constants/config';
 const { LIMIT } = config;
 
 export default function ProductList(props) {
+    const [isScroll, setIsScroll] = useState(false);
+    const productRef = React.useRef();
+    React.useEffect(() => {
+        if (productRef.current)
+            productRef.current.scrollIntoView();
+        // run this function from an event handler or pass it to useEffect to execute scroll
+    }, [isScroll])
+
+
     // console.log('product page');
     const location = useLocation();
     const history = useHistory();
@@ -31,7 +40,7 @@ export default function ProductList(props) {
         color: '',
         size: '',
         minprice: 0,
-        maxprice: 10000,
+        maxprice: 2000,
         status: '',
         sort: '',
     });
@@ -69,7 +78,7 @@ export default function ProductList(props) {
             queryObject.color = queryObject.color === undefined ? '' : queryObject.color;
             queryObject.size = queryObject.size === undefined ? '' : queryObject.size;
             queryObject.minprice = queryObject.minprice === undefined ? 0 : queryObject.minprice;
-            queryObject.maxprice = queryObject.maxprice === undefined ? 10000 : queryObject.maxprice;
+            queryObject.maxprice = queryObject.maxprice === undefined ? 2000 : queryObject.maxprice;
             queryObject.status = queryObject.status === undefined ? '' : queryObject.status;
             queryObject.sort = queryObject.sort === undefined ? '' : queryObject.sort;
             setFilter(prevState => ({
@@ -95,9 +104,11 @@ export default function ProductList(props) {
                     resCategroup = CallAPI(`/cate-group/${queryObject.categroup}`, 'get', null)
                 }
                 let resProductData = await resProduct;
-                let resCategroupData = await resCategroup;
                 setProductData(resProductData.data.data);
-                setCategroup(resCategroupData.data.data.name);
+                if (resCategroup.data) {
+                    let resCategroupData = await resCategroup;
+                    setCategroup(resCategroupData.data.data.name);
+                }
             } catch (err) {
                 console.log(err)
                 setLoad(false);
@@ -131,6 +142,7 @@ export default function ProductList(props) {
                 }
         }
         history.push({ search: queryString });
+        setIsScroll(!isScroll);
     }
 
     const handleChangePage = (page) => {
@@ -175,7 +187,7 @@ export default function ProductList(props) {
     }
 
     return (
-        <Container>
+        <Container ref={productRef}>
             <Progress isLoad={load} />
             <Row>
                 <center>

@@ -25,8 +25,6 @@ const SideBar = (props) => {
     available: false,
   })
 
-  // console.log(cates)
-
   useEffect(() => {
     const fetchAll = async () => {
       try {
@@ -115,7 +113,7 @@ const SideBar = (props) => {
       <div className="line-litle"></div>
       <div className='cate'>
         {cates.map((cate) => (
-          <p onClick={() => handleChangeCate(cate._id)} key={cate._id} className={`m-0 text-14 text-regular cursor-hover ${props.filter.cate === cate._id ? 'text-color-orange ' : ''}`}>{cate.name}</p>
+          <p key={cate._id} onClick={() => handleChangeCate(cate._id)} key={cate._id} className={`m-0 text-14 text-regular cursor-hover ${props.filter.cate === cate._id ? 'text-color-orange ' : ''}`}>{cate.name}</p>
         ))}
       </div>
       <div className="line"></div>
@@ -134,13 +132,13 @@ const SideBar = (props) => {
       <hr className='mt-0 mb-2' />
       <div className='d-flex justify-content-between cursor-hover product-filter-color' onClick={() => setFilter(prevState => ({ ...prevState, color: !prevState.color }))}>
         <span className={`text-14 ${filter.color ? '' : 'text-regular'}`}>Color</span>
-        <img src={arrowDown} alt='Arrow down' className={`product-filter-color-arrow-down${filter.color ? '-show' : ''}`} />
+        <img src={arrowDown} alt='Arrow down' className={`product-filter-arrow-down${filter.color ? '-show' : ''}`} />
       </div>
       <div className={`product-filter-color-items${filter.color ? '-show' : ''}`}>
         <div className="line-dash"></div>
         <Row>
           {props.colorsData && props.colorsData.map((color) => (
-            <Col xl={3} md={4} xs={6}>
+            <Col key={color._id} xl={3} md={4} xs={6}>
               <button title={color.name} onClick={() => handleChangeColor(color._id)} className={`product-filter-color-item${props.filter.color === color._id ? '-active' : ''}`} style={{ backgroundColor: color.code }} />
             </Col>
           ))}
@@ -149,12 +147,12 @@ const SideBar = (props) => {
       <hr className='mt-0 mb-2' />
       <div className='d-flex justify-content-between cursor-hover product-filter-brand' onClick={() => setFilter(prevState => ({ ...prevState, brand: !prevState.brand }))}>
         <span className={`text-14 ${filter.brand ? '' : 'text-regular'}`}>Brand</span>
-        <img src={arrowDown} alt='Arrow down' className={`product-filter-brand-arrow-down${filter.brand ? '-show' : ''}`} />
+        <img src={arrowDown} alt='Arrow down' className={`product-filter-arrow-down${filter.brand ? '-show' : ''}`} />
       </div>
       <div className={`product-filter-brand-items${filter.brand ? '-show' : ''}`} >
         <div className="line-dash"></div>
         {props.brandData && props.brandData.map((brand) => (
-          <div onClick={() => handleChangeBrand(brand._id)} key={brand._id} className='product-filter-brand-item d-flex justify-content-between align-items-center p-2 mb-1 bg-white'>
+          <div key={brand._id} onClick={() => handleChangeBrand(brand._id)} key={brand._id} className='product-filter-brand-item d-flex justify-content-between align-items-center p-2 mb-1 bg-white'>
             <span className={`cursor-hover w-100 text-14 text-regular ${props.filter.brand === brand._id ? 'text-color-orange' : ''}`}>{brand.name}</span>
             {props.filter.brand === brand._id ? <img src={checkedBox} alt='checked-box' /> : <img src={checkBox} alt='check-box' />}
           </div>
@@ -163,13 +161,15 @@ const SideBar = (props) => {
       <hr className='mt-0 mb-2' />
       <div className='d-flex justify-content-between cursor-hover product-filter-price' onClick={() => setFilter(prevState => ({ ...prevState, price: !prevState.price }))}>
         <span className={`text-14 ${filter.price ? '' : 'text-regular'}`}>Price</span>
-        <img src={arrowDown} alt='Arrow down' className={`product-filter-price-arrow-down${filter.price ? '-show' : ''}`} />
+        <img src={arrowDown} alt='Arrow down' className={`product-filter-arrow-down${filter.price ? '-show' : ''}`} />
       </div>
       <div className={`product-filter-price-items${filter.price ? '-show' : ''}`} >
         <div className="line-dash mb-4"></div>
         <MultiRangeSlider
-          min={0}
-          max={5000}
+          min={QueryString.parse(history.location.search).minprice === undefined ? 0 : QueryString.parse(history.location.search).minprice}
+          max={QueryString.parse(history.location.search).maxprice === undefined ? 0 : QueryString.parse(history.location.search).maxprice}
+          minDefault={0}
+          maxDefault={2000}
           onChange={({ min, max }) => { setMinValue(min); setMaxValue(max); }}
         />
         <div className='text-center mb-3'>
@@ -183,7 +183,7 @@ const SideBar = (props) => {
       <hr className='mt-0 mb-2' />
       <div className='d-flex justify-content-between cursor-hover product-filter-available' onClick={() => setFilter(prevState => ({ ...prevState, available: !prevState.available }))}>
         <span className={`text-14 ${filter.available ? '' : 'text-regular'}`}>Available</span>
-        <img src={arrowDown} alt='Arrow down' className={`product-filter-available-arrow-down${filter.available ? '-show' : ''}`} />
+        <img src={arrowDown} alt='Arrow down' className={`product-filter-arrow-down${filter.available ? '-show' : ''}`} />
       </div>
       <div className={`product-filter-available-items${filter.available ? '-show' : ''}`}>
         <div className="line-dash"></div>

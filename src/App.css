@@ -359,6 +359,7 @@ input[type=number]::-webkit-outer-spin-button {
   height: 40px;
   background-color: transparent;
   border: solid 1px #808080;
+  padding: 0;
 }
 
 .product-info-size-item-btn-active{
@@ -368,6 +369,7 @@ input[type=number]::-webkit-outer-spin-button {
   border: none;
   color: white;
   font-weight: bold;
+  padding: 0;
 }
 
 .product-info-size-item-btn:hover:enabled{

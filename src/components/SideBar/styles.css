@@ -50,7 +50,7 @@
 
 .product-filter-arrow-down-show{
   transform: rotate(180deg);
-  transition: .5s all;
+  transition: .2s all;
 }
 
 .product-filter-size-item-btn{
