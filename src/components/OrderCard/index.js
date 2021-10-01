@@ -3,6 +3,7 @@ import { Badge } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 import threeDot from '../../images/threedots.svg';
+import productImg from '../../images/no-img.png';
 
 export default function OrderCard(props) {
 
@@ -68,7 +69,7 @@ export default function OrderCard(props) {
         <div className='d-flex justify-content-between align-items-center mb-3' key={idx}>
           <div className='d-flex'>
             <Link to={'product-info/' + item.productId._id}>
-              <img className='img-cover' src={item.productId.imageList[0]} width='100px' height='100px' alt={item.productId.name} />
+              <img className='img-cover' src={item.productId.imageList[0] ? item.productId.imageList[0] : productImg} width='100px' height='100px' alt={item.productId.name} />
             </Link>
             <div className='ms-3'>
               <Link to={'product-info/' + item.productId._id} className='link-custom'>

@@ -10,12 +10,15 @@ import avatar from '../../images/avatar.jpg';
 import arrowDown from '../../images/arrow-down.svg';
 import { useUserState, logoutUser, useUserDispatch } from "../../contexts/UserContext";
 import productImage from '../../images/no-img.png';
+import callApi from '../../services/CallAPI';
 
 export default function Header(props) {
   const { isAuthenticated } = useUserState();
   const userDispatch = useUserDispatch();
   const catelists = props.catelists;
   const [search, setSearch] = useState('');
+  const [data, setData] = useState([]);
+  const [dataClone, setDataClone] = useState([]);
   const history = useHistory();
   const location = useLocation();
   // console.log(props.user)
@@ -24,6 +27,12 @@ export default function Header(props) {
   useEffect(() => {
     queryObject.name = queryObject.name === undefined ? '' : queryObject.name;
     setSearch(queryObject.name);
+    const fetchData = async () => {
+      let res = await callApi('/product/name', 'get', {});
+      setData(res.data.slice(0, 10));
+      setDataClone(res.data);
+    }
+    fetchData();
   }, [])
 
   const handleSearch = (e) => {
@@ -36,17 +45,31 @@ export default function Header(props) {
       <Container>
         <Row className='header-group'>
           <Col>
-            <Form className='header-search d-flex' onSubmit={(e) => handleSearch(e)}>
-              <FormControl
-                className='text-14'
-                type="text"
-                placeholder="search"
-                value={search}
-                onChange={(e) => { setSearch(e.target.value) }}
-              />
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#8B8B8C" className="bi bi-search icon-search" viewBox="0 0 16 16">
-                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
-              </svg>
+            <Form className='header-search' onSubmit={(e) => handleSearch(e)}>
+              <div className='search-auto-input' style={{ position: 'relative' }}>
+                <div className='d-flex'>
+                  <FormControl
+                    className='text-14'
+                    type="text"
+                    placeholder="search"
+                    value={search}
+                    onChange={(e) => { setSearch(e.target.value); setData(dataClone.filter(i => i.name.toLowerCase().includes(e.target.value.toLowerCase())).slice(0, 10)) }}
+                  />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#8B8B8C" className="bi bi-search icon-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" />
+                  </svg>
+                </div>
+                {
+                  data.length > 0 &&
+                  <div className="search-auto-list">
+                    {
+                      data.map((item, index) => {
+                        return <Link className='link-custom' to={`/product-list?name=${item.name}`}><div className='search-auto-item max-width suggestion-content' value={item.name} key={index}> {item.name}</div></Link>
+                      })
+                    }
+                  </div>
+                }
+              </div>
             </Form>
           </Col>
           <Col className='d-flex justify-content-center'>
