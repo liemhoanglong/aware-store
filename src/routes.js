@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
+import Demo from "./pages/Demo";
 import PageNotFound from "./pages/PageNotFound";
 
 const routes = [
@@ -24,9 +25,14 @@ const routes = [
         component: () => <Signup />
     },
     {
-        path: '/Profile',
+        path: '/profile',
         exact: true,
         component: () => <Profile />
+    },
+    {
+        path: '/demo-redux',
+        exact: true,
+        component: () => <Demo />
     },
     {
         path: '',

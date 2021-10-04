@@ -1,0 +1,95 @@
+
+.btn-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  text-align: center;
+  font-size: 20px;
+  line-height: 1.42857;
+  animation-name: mymove;
+  animation-duration: 200ms ;
+  animation-timing-function: ease-in;
+  background-color: #ffa15f;
+  border-color: #ff8c3a;
+}
+
+.btn-circle:hover{
+  background-color: #ff8c3a;
+  border-color: #ff8c3a;
+}
+
+@keyframes mymove {
+  0% {
+    transform: translateY(150%);
+  }
+  100% {
+    transform: translateY(0);
+  }   
+}
+
+.scroll{
+  margin-bottom: 100px;
+  margin-right: 50px;
+  position: fixed;
+  display: flex;
+  bottom: 0; 
+  right: 0;
+  z-index: 10000;
+}
+.active{
+  display: flex;
+}
+.scroll.block{
+  display: none;
+}
+
+
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .scroll{
+    margin-bottom: 100px;
+    margin-right: 50px;
+    position: fixed;
+    bottom: 0; 
+    right: 0;
+    z-index: 10000 
+  }
+
+}
+
+/* Small devices (landscape phones, 576px and up)*/
+@media (min-width: 576px) and (max-width: 767.98px) { 
+  .scroll{
+    margin-bottom: 100px;
+    margin-right: 5px;
+    position: fixed;
+    bottom: 0; 
+    right: 0;
+    z-index: 10000 
+  }
+}
+
+/* Extra small devices (portrait phones, less than 576px) */
+@media (max-width: 575.98px) { 
+  .scroll{
+    margin-bottom: 190px;
+    margin-right: 5px;
+    position: fixed;
+    bottom: 0; 
+    right: 0;
+    z-index: 10000 
+  }
+  
+  .btn-circle {
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.42857;
+    padding: 0%;
+    animation-name: null;
+  }
+
+}

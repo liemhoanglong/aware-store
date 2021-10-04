@@ -4,6 +4,10 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-d
 import routes from './routes';
 import './App.css';
 import Header from "./components/Header";
+import Progress from './components/Progress';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { getMyProfile } from './redux/user/userSlice';
 
 const showContentMenus = (routes) => {
   let result = null;
@@ -20,9 +24,17 @@ const showContentMenus = (routes) => {
 };
 
 function App() {
+  const profile = useSelector((state) => state.user.profile)
+  const isLoad = useSelector((state) => state.user.isLoad)
+  const dispatch = useDispatch();
+
+  if (localStorage.getItem('access_token') && !profile && !isLoad) {
+    dispatch(getMyProfile());
+  }
 
   return (
     <Router>
+      <Progress isLoad={isLoad} />
       {/* <Suspense
       fallback={
       <div style={{ width: "100%" }}>

@@ -4,14 +4,16 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { UserProvider } from './contexts/UserContext';
+
+import { store } from './redux/store'
+import { Provider } from 'react-redux'
 
 ReactDOM.render(
-  <UserProvider>
-    <React.StrictMode>
+  <React.StrictMode>
+    <Provider store={store}>
       <App />
-    </React.StrictMode>
-  </UserProvider>
+    </Provider>
+  </React.StrictMode>
   ,
   document.getElementById('root')
 );

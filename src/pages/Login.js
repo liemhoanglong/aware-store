@@ -1,33 +1,51 @@
 import React, { useState } from 'react';
 import { Redirect } from 'react-router';
 
-import { useUserDispatch, loginUser, useUserState } from "../contexts/UserContext";
+import { useSelector, useDispatch } from 'react-redux';
+import { login } from '../redux/user/userSlice';
+import Progress from '../components/Progress';
 
 export default function Login(props) { //func login will dispatch action
-    const { isAuthenticated } = useUserState();
+    const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+    const isLoad = useSelector((state) => state.user.isLoad);
+    const error = useSelector((state) => state.user.error);
+    const dispatch = useDispatch();
 
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
-    const [load, setLoad] = useState(false);
-    const [error, setError] = useState('');
+    const [input, setInput] = useState({
+        username: '',
+        password: '',
+    });
 
-    const userDispatch = useUserDispatch();
-
-    const onSubmit = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        loginUser(userDispatch, username, password, props.history, setLoad, setError)
-        setLoad(false);
+        dispatch(login(input));
+    }
+
+    const handleChange = (e) => {
+        setInput({
+            ...input,
+            [e.target.name]: e.target.value
+        });
     }
 
     if (isAuthenticated) return (<Redirect to='/' />);
     return (
-        <>
-            <h1>Login</h1>
-            <form onSubmit={onSubmit}>
-                <input type='email' value={username} onChange={e => setUsername(e.target.value)} placehoder='Enter your email...' />
-                <input type='password' value={password} onChange={e => setPassword(e.target.value)} placehoder='Enter your password...' />
-                <button>Log in</button>
-            </form>
-        </>
+        <div className="container">
+            <Progress isLoad={isLoad} />
+            <div className='row'>
+                {error && <span className='text-danger'>{error}</span>}
+                <div className='col'>
+                    {!isAuthenticated &&
+                        <form onSubmit={handleSubmit}>
+                            <input type="text" name='username' value={input.username} onChange={handleChange} />
+                            <input type="password" name='password' value={input.password} onChange={handleChange} />
+                            <button type='submit'>login</button>
+
+                        </form>
+                    }
+
+                </div >
+            </div >
+        </div >
     )
 }

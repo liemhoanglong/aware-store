@@ -2,7 +2,7 @@ import axios from 'axios';
 import config from '../constants/config';
 
 const callAuthAPI = (endpoint, method, body) => {
-  const token = localStorage.getItem('TOKEN');
+  const token = localStorage.getItem('access_token');
   if (!token) return;
   try {
     return axios({
